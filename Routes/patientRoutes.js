@@ -1,7 +1,7 @@
 // routes/patientRoutes.js
 const express = require('express');
 const router = express.Router();
-const { getPatientPersonalData, updatePatientPersonalData, createPatient } = require('../Controllers/patientControllers');
+const { getPatientPersonalData, updatePatientPersonalData, createPatient } = require('../Controller/patientControllers');
 
 
 
