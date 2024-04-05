@@ -1,39 +1,47 @@
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const db = require("../Config/config.js");
 const RegisterData = JSON.parse(fs.readFileSync("RegisterData.json"));
 
 // @desc Add registration data
 // @route POST /api/PatientData
 // @access private
-const AddRegistrationData = async (req, res) => {
-  let patientId;
-  let { email, password } = req.body;
-  const myEncPassword = await bcrypt.hash(password, 10);
-  console.log("encrypted");
-  console.log(myEncPassword);
-  if (RegisterData.length === 0) {
-    patientId = 1;
-  } else if (RegisterData.length > 0) {
-    patientId = RegisterData[RegisterData.length - 1].id + 1;
-  }
-  let newData = Object.assign({ id: patientId }, req.body);
-  RegisterData.push(newData);
-  fs.writeFile("RegisterData.json", JSON.stringify(RegisterData), (err) => {
-    res.status(201).json({
-      status: "created",
-      data: newData,
-    });
-  });
+const AddRegistrationData = (req, res) => {
+  const { Email, Passwords } = req.body;
+  db.query(
+    "Select * from CredentialData where Email = ?",
+    [Email],
+    async (error, results) => {
+      if (error) {
+        res.status(404).json({ error: error });
+      }
 
-  const token = jwt.sign(
-    {email,password},"shhhh",
-    {
-        expiresIn: "2h"
+      if (results.length > 0) {
+        res.status(400).json({ error: "Email already exists" });
+      }
+
+      const myEncPassword = await bcrypt.hash(Passwords, 10);
+      const token = jwt.sign({ Email, Passwords }, "shhhh", {
+        expiresIn: "2h",
+      });
+
+      db.query(
+        "insert into CredentialData(Email, passwords ,token) values (?,?,?)",
+        [Email, myEncPassword, token],
+        (error, result) => {
+          if (error) {
+            res.status(404).json({ error: error });
+          } else {
+            res.status(201).json({
+              result: result,
+            });
+            console.log(result);
+          }
+        }
+      );
     }
   );
-    console.log("token");
-  console.log(token);
 };
 
 // @desc Delete registered data
@@ -66,4 +74,19 @@ const DeleteRegistrationData = (req, res) => {
   console.log(patientId - 1);
 };
 
-module.exports = { AddRegistrationData, DeleteRegistrationData };
+// @desc Delete registered data
+// @route Delete /api/PatientData/:id
+// @access private
+const listRegistration = (req, res) => {
+  let q = "select * from CredentialData";
+  db.query(q, (err, data) => {
+    if (err) return res.json(err);
+    else return res.json(data);
+  });
+};
+
+module.exports = {
+  listRegistration,
+  AddRegistrationData,
+  DeleteRegistrationData,
+};
