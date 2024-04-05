@@ -2,7 +2,6 @@ const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../Config/config.js");
-const RegisterData = JSON.parse(fs.readFileSync("RegisterData.json"));
 
 // @desc Add registration data
 // @route POST /api/PatientData
@@ -14,32 +13,35 @@ const AddRegistrationData = (req, res) => {
     [Email],
     async (error, results) => {
       if (error) {
-        res.status(404).json({ error: error });
+        res.status(500).json({ error: "Database error"  });
       }
 
-      if (results.length > 0) {
+      else{
+        if (results.length > 0) {
         res.status(400).json({ error: "Email already exists" });
       }
+      else{
+        const myEncPassword = await bcrypt.hash(Passwords, 10);
+        const token = jwt.sign({ Email, Passwords }, "shhhh", {
+          expiresIn: "2h",
+        });
 
-      const myEncPassword = await bcrypt.hash(Passwords, 10);
-      const token = jwt.sign({ Email, Passwords }, "shhhh", {
-        expiresIn: "2h",
-      });
-
-      db.query(
-        "insert into CredentialData(Email, passwords ,token) values (?,?,?)",
-        [Email, myEncPassword, token],
-        (error, result) => {
-          if (error) {
-            res.status(404).json({ error: error });
-          } else {
-            res.status(201).json({
-              result: result,
-            });
-            console.log(result);
+        db.query(
+          "insert into CredentialData(Email, passwords ,token) values (?,?,?)",
+          [Email, myEncPassword, token],
+          (error, result) => {
+            if (error) {
+              res.status(404).json({ error: error });
+            } else {
+              res.status(201).json({
+                result: result,
+              });
+              console.log(result);
+            }
           }
-        }
-      );
+        );
+      }
+    }
     }
   );
 };
@@ -48,30 +50,13 @@ const AddRegistrationData = (req, res) => {
 // @route Delete /api/PatientData/:id
 // @access private
 const DeleteRegistrationData = (req, res) => {
-  let patientId = parseInt(req.params.id);
-  let data = RegisterData;
-  var removeByAttr = function (arr, attr, value) {
-    var i = arr.length;
-    while (i--) {
-      if (
-        arr[i] &&
-        arr[i].hasOwnProperty(attr) &&
-        arguments.length > 2 &&
-        arr[i][attr] === value
-      ) {
-        arr.splice(i, 1);
-      }
-    }
-    return arr;
-  };
-  const deletedData = removeByAttr(data, "id", patientId);
-  fs.writeFile("RegisterData.json", JSON.stringify(deletedData), (err) => {
-    res.status(201).json({
-      status: deletedData,
-    });
+  const Id = parseInt(req.params.id); 
+  let q = "delete from CredentialData where Id = ?";
+  db.query(q, [Id], (err, data) => {
+    if (err) return res.json(err);
+    console.log(data);
   });
-  //   res.json(patientId - 1);
-  console.log(patientId - 1);
+  res.json("succerssfull");
 };
 
 // @desc Delete registered data
