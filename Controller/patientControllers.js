@@ -1,11 +1,12 @@
-const pool = require('../config/database.js');
+const db = require('../Config/config.js');
+const jwt = require("jsonwebtoken");
 
 const getPatientPersonalData = (req, res) => {
-    pool.query(
+    db.query(
         "SELECT * FROM personalInfo",
         (error, results) => {
             if (error) {
-                // console.error("Error fetching patient personal details:", error);
+
                 return res.status(500).json({ error: "Database error" });
             }
             else{
@@ -16,25 +17,32 @@ const getPatientPersonalData = (req, res) => {
 
 const createPatient = (req, res) => {
     try {
-
-        const { userId, firstName, lastName, mobileNumber, dateOfBirth, weight, height, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription } = req.body;
+        let token = req.headers.authorization;
+        const decoded = jwt.verify(token, "shhhh");
+        const {firstName, lastName, mobileNumber, dateOfBirth, weight, height, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription } = req.body;
         console.log(req.body);
+        console.log(decoded);
 
 
 
-        if (!userId || !firstName || !lastName || !mobileNumber || !dateOfBirth || !weight || !height || !countryOfOrigin || isDiabetic === undefined || !hasCardiacIssues === undefined || !hasBloodPressureConcerns === undefined || !diseaseType || !diseaseDescription) {
+        if (!firstName || !lastName || !mobileNumber || !dateOfBirth || !weight || !height || !countryOfOrigin || isDiabetic === undefined || !hasCardiacIssues === undefined || !hasBloodPressureConcerns === undefined || !diseaseType || !diseaseDescription) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
         let birthDate = new Date(`${dateOfBirth}`)
+        // console.log(birthDate);
         let curr = new Date()
         let diff = curr - birthDate;
         let age = Math.floor(diff / 31557600000)
         console.log(age);
 
-        pool.query(
-            "INSERT INTO personalInfo (userId, firstName, lastName, mobileNumber, dateOfBirth,age, weight, height, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
-            [userId, firstName, lastName, mobileNumber, dateOfBirth, age, weight, height, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription],
+        let heightInMeters = parseFloat(height.split('-')[0]) * 0.3048 + parseFloat(height.split('-')[1]) * 0.0254; 
+        let bmi = parseFloat(weight) / (heightInMeters * heightInMeters);
+
+
+        db.query(
+            "INSERT INTO personalInfo (userId, firstName, lastName, mobileNumber, dateOfBirth,age, weight, height,Bmi, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)",
+            [decoded.ID, firstName, lastName, mobileNumber, dateOfBirth, age, weight, height,bmi, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription],
             (error, results) => {
                 if (error) {
                     console.error("Error creating patient:", error);
@@ -57,12 +65,12 @@ const updatePatientPersonalData = (req, res) => {
     const { firstName, lastName, mobileNumber, dateOfBirth, weight, height, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription } = req.body;
 
 
-    if (!userId || !firstName || !lastName || !mobileNumber || !dateOfBirth || !weight || !height || !countryOfOrigin || isDiabetic === undefined || !hasCardiacIssues === undefined || !hasBloodPressureConcerns === undefined || !diseaseType || !diseaseDescription) {
+    if (!firstName || !lastName || !mobileNumber || !dateOfBirth || !weight || !height || !countryOfOrigin || isDiabetic === undefined || !hasCardiacIssues === undefined || !hasBloodPressureConcerns === undefined || !diseaseType || !diseaseDescription) {
         return res.status(400).json({ error: "All fields are required" });
     }
 
 
-    pool.query(
+    db.query(
         "UPDATE personalInfo SET firstName=?, lastName=?, mobileNumber=?, dateOfBirth=?, weight=?, height=?, countryOfOrigin=?, isDiabetic=?, hasCardiacIssues=?, hasBloodPressureConcerns=?, diseaseType=?, diseaseDescription=? WHERE userId=?",
         [firstName, lastName, mobileNumber, dateOfBirth, weight, height, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription, patientId],
         (error, results) => {

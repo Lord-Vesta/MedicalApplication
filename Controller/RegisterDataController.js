@@ -1,69 +1,72 @@
-const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const RegisterData = JSON.parse(fs.readFileSync("RegisterData.json"));
+const db = require("../Config/config.js");
 
 // @desc Add registration data
 // @route POST /api/PatientData
 // @access private
-const AddRegistrationData = async (req, res) => {
-  let patientId;
-  let { email, password } = req.body;
-  const myEncPassword = await bcrypt.hash(password, 10);
-  console.log("encrypted");
-  console.log(myEncPassword);
-  if (RegisterData.length === 0) {
-    patientId = 1;
-  } else if (RegisterData.length > 0) {
-    patientId = RegisterData[RegisterData.length - 1].id + 1;
-  }
-  let newData = Object.assign({ id: patientId }, req.body);
-  RegisterData.push(newData);
-  fs.writeFile("RegisterData.json", JSON.stringify(RegisterData), (err) => {
-    res.status(201).json({
-      status: "created",
-      data: newData,
-    });
-  });
+const AddRegistrationData = (req, res) => {
 
-  const token = jwt.sign(
-    {email,password},"shhhh",
-    {
-        expiresIn: "2h"
+  const { Email, Passwords,roles } = req.body;
+  console.log(req.body);
+  db.query(
+    "Select * from CredentialData where Email = ?",
+    [Email],
+    async (error, results) => {
+      if (error) {
+        res.status(500).json({ error: "Database error" });
+      } else {
+        if (results.length > 0) {
+          res.status(400).json({ error: "Email already exists" }); 
+        } else {
+          const myEncPassword = await bcrypt.hash(Passwords, 10);
+
+          db.query(
+            "insert into CredentialData(Email, passwords,roles) values (?,?,?)",
+            [Email, myEncPassword,roles],
+            (error, result) => {
+              if (error) {
+                res.status(404).json({ error: error });
+              } else {
+                res.status(201).json({
+                  result: result,
+                });
+                console.log(result);
+              }
+            }
+          );
+        }
+      }
     }
   );
-    console.log("token");
-  console.log(token);
 };
 
 // @desc Delete registered data
 // @route Delete /api/PatientData/:id
 // @access private
 const DeleteRegistrationData = (req, res) => {
-  let patientId = parseInt(req.params.id);
-  let data = RegisterData;
-  var removeByAttr = function (arr, attr, value) {
-    var i = arr.length;
-    while (i--) {
-      if (
-        arr[i] &&
-        arr[i].hasOwnProperty(attr) &&
-        arguments.length > 2 &&
-        arr[i][attr] === value
-      ) {
-        arr.splice(i, 1);
-      }
-    }
-    return arr;
-  };
-  const deletedData = removeByAttr(data, "id", patientId);
-  fs.writeFile("RegisterData.json", JSON.stringify(deletedData), (err) => {
-    res.status(201).json({
-      status: deletedData,
-    });
+  const Id = parseInt(req.params.id);
+  let q = "delete from CredentialData where Id = ?";
+  db.query(q, [Id], (err, data) => {
+    if (err) return res.json(err);
+    console.log(data);
   });
-  //   res.json(patientId - 1);
-  console.log(patientId - 1);
+  res.json("succerssfull");
 };
 
-module.exports = { AddRegistrationData, DeleteRegistrationData };
+// @desc Delete registered data
+// @route Delete /api/PatientData/:id
+// @access private
+const listRegistration = (req, res) => {
+  let q = "select * from CredentialData";
+  db.query(q, (err, data) => {
+    if (err) return res.json(err);
+    else return res.json(data);
+  });
+};
+
+module.exports = {
+  listRegistration,
+  AddRegistrationData,
+  DeleteRegistrationData,
+};
