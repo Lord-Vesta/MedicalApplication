@@ -1,4 +1,3 @@
-const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../Config/config.js");
@@ -22,13 +21,10 @@ const AddRegistrationData = (req, res) => {
       }
       else{
         const myEncPassword = await bcrypt.hash(Passwords, 10);
-        const token = jwt.sign({ Email, Passwords }, "shhhh", {
-          expiresIn: "2h",
-        });
 
         db.query(
-          "insert into CredentialData(Email, passwords ,token) values (?,?,?)",
-          [Email, myEncPassword, token],
+          "insert into CredentialData(Email, passwords) values (?,?)",
+          [Email, myEncPassword],
           (error, result) => {
             if (error) {
               res.status(404).json({ error: error });
