@@ -1,44 +1,122 @@
 const fs = require("fs");
+const db = require("../Config/config");
+const jwt = require("jsonwebtoken");
 
-let FamilyData = JSON.parse(fs.readFileSync("FamilyData.json"));
 
 // @desc Gets all family data
 // @route GET /api/FamilyData
 // @access private
 const getFamilyData = (req, res) => {
-  res.status(200).json({
-    status: "fetched",
-    data: FamilyData,
+  let q = "select * from FamilyData";
+
+  db.query(q, (err, data) => {
+    if (err) throw err;
+    else{
+      res.status(200).json({
+        status: "fetched",
+        data: data,
+      });
+    }
   });
-};  
+   
+  // res.status(200).json({
+  //   status: "fetched",
+  //   data: FamilyData,
+  // });
+};
 
 // @desc Add family data
 // @route POST /api/FamilyData
 // @access private
 const AddFamilyData = (req, res) => {
-  FamilyData.push(req.body);
-  fs.writeFileSync("FamilyData.json", JSON.stringify(FamilyData));
-  res.status(201);
-  res.json({
-    status: "created",
-    data: req.body,
-  });
+  let token = req.headers.authorization;
+  const decoded = jwt.verify(token, "shhhh");
+  console.log(decoded);
+  const {
+    FathersName,
+    FathersAge,
+    FathersCountry,
+    MothersName,
+    mothersAge,
+    motherCountry,
+    diabetic,
+    preDiabetic,
+    CardiacPast,
+    cardiacPresent,
+    bloodPressure,
+  } = req.body;
+
+  let q = `insert into FamilyData (Id,FathersName,FathersAge,FathersCountry,MothersName,mothersAge,motherCountry,diabetic,preDiabetic,CardiacPast,cardiacPresent,bloodPressure) values (?,?,?,?,?,?,?,?,?,?,?,?)`;
+  db.query(
+    q,
+    [
+      decoded.ID,
+      FathersName, 
+      FathersAge,
+      FathersCountry,
+      MothersName,
+      mothersAge,
+      motherCountry,
+      diabetic,
+      preDiabetic,
+      CardiacPast,
+      cardiacPresent,
+      bloodPressure,
+    ],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: "Database error" });
+      } else {
+        res.json(result);
+      }
+    }
+  );
 };
 
 // @desc Edit family data
 // @route PUT /api/FamilyData
 // @access private
 const EditFamilyData = (req, res) => {
-  let existingData = FamilyData;
-  let patientId = parseInt(req.params.id);
+  let userId = req.params.id;
+  const {
+    FathersName,
+    FathersAge,
+    FathersCountry,
+    MothersName,
+    mothersAge,
+    motherCountry,
+    diabetic,
+    preDiabetic,
+    CardiacPast,
+    cardiacPresent,
+    bloodPressure,
+  } = req.body;
 
-  existingData[patientId-1] = req.body;
-  fs.writeFile("FamilyData.json", JSON.stringify(existingData), () => {
-    res.status(200).json({
-        status:"editted",
-        data : req.body
-    })
-  });
+  let q = `update FamilyData set FathersName = ? ,FathersAge = ?, FathersCountry = ?,MothersName = ?,mothersAge = ?,motherCountry = ?,diabetic = ?,preDiabetic = ?,CardiacPast = ?,cardiacPresent = ?,bloodPressure = ? where Id = ${userId}`;
+
+  db.query(
+    q,
+    [
+      FathersName,
+      FathersAge,
+      FathersCountry,
+      MothersName,
+      mothersAge,
+      motherCountry,
+      diabetic,
+      preDiabetic,
+      CardiacPast,
+      cardiacPresent,
+      bloodPressure,
+    ],
+    (err, result) => {
+      if (err) {
+        res.status(500).json({ error: "Database error" });
+      } else {
+        res.json(result);
+      }
+    }
+  );
 };
 
 module.exports = { getFamilyData, AddFamilyData, EditFamilyData };
