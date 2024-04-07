@@ -1,28 +1,29 @@
 
 const db = require("../Config/config");
 const jwt = require("jsonwebtoken");
-
+const { listFamilyData } = require("../Models/models");
 
 // @desc Gets all family data
 // @route GET /api/FamilyData
 // @access private
 const getFamilyData = (req, res) => {
-  let q = "select * from FamilyData";
+  try {
+    listFamilyData(async function (result){
+      if(result.length > 0){
+        res.status(200).json({
+          status: "fetched",
+          data: result,
+        });
+      } else{
+        res.status(400).json({
+          status: "No data found",
+        });
+      }
+    })
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
 
-  db.query(q, (err, data) => {
-    if (err) throw err;
-    else{
-      res.status(200).json({
-        status: "fetched",
-        data: data,
-      });
-    }
-  });
-   
-  // res.status(200).json({
-  //   status: "fetched",
-  //   data: FamilyData,
-  // });
 };
 
 // @desc Add family data
