@@ -2,7 +2,7 @@
 const sql = require('mysql2');
 require('dotenv').config();
 
-const pool = sql.createPool({
+const db = sql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -10,4 +10,4 @@ const pool = sql.createPool({
     connectionLimit: 10
 });
 
-module.exports = pool;
+module.exports = db;
