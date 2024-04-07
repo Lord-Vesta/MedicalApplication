@@ -4,6 +4,7 @@ const {
   InsertintoData,
   deleteData,
   ListData,
+  checkId
 } = require("../Models/models.js");
 const { verifyToken } = require("../Utils/jwtutils.js");
 
@@ -40,10 +41,8 @@ const DeleteRegistrationData = (req, res) => {
     const authHeader = req.headers["authorization"];
     verifyToken(authHeader);
     let decodedToken = verifyToken(authHeader);
-    console.log(decodedToken.data);
-
+  
     if (decodedToken.data.roles === "admin") {
-      const Id = parseInt(req.params.id);
       deleteData(Id, async function (result) {
         if (result.affectedRows === 0) {
           res.status(400).json({

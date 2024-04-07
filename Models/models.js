@@ -35,47 +35,60 @@ const deleteData = (Id, callback) => {
     async (err, result) => {
       if (err) {
         callback({ error: "Database error" });
-      } else  {
+      } else {
         return callback(result);
       }
     }
   );
 };
 
-const login = (Email,callback) => {
-    db.query("select * from CredentialData where Email =?",[Email],async (err, result) => {
-        if(err){
-            callback({error: "Database error"})
-        }
-        else{
-            return callback(result)
-        }
-    })
-}
+const login = (Email, callback) => {
+  db.query(
+    "select * from CredentialData where Email =?",
+    [Email],
+    async (err, result) => {
+      if (err) {
+        callback({ error: "Database error" });
+      } else {
+        return callback(result);
+      }
+    }
+  );
+};
 
 const ListData = (callback) => {
-    db.query("select * from CredentialData",async (err, result) => {
-        if(err){
-            callback({error: "Database error"})
-        }
-        else{
-            callback(result)
-        }
-    })
-}
+  db.query("select * from CredentialData", async (err, result) => {
+    if (err) {
+      callback({ error: "Database error" });
+    } else {
+      callback(result);
+    }
+  });
+};
 
- const listFamilyData = (callback)=>{
-    db.query("select * from FamilyData",async (err, result) => {
-        if(err){
-            callback({error: "Database error"})
-        }
-        else{
-            callback(result)
-        }
-    })
- }
+const listFamilyData = (callback) => {
+  db.query("select * from FamilyData", async (err, result) => {
+    if (err) {
+      callback({ error: "Database error" });
+    } else {
+      callback(result);
+    }
+  });
+};
 
-
+const checkId = (Id, callback) => {
+  db.query(
+    "select * from CredentialData where Id = ?",
+    [Id],
+    async (err, result) => {
+      if (err) {
+        callback({ error: "Database error" });
+      } else {
+        return callback(result);
+      }
+    }
+  );
+};
 
 module.exports = {
   checkAlreadyPresent,
@@ -83,6 +96,6 @@ module.exports = {
   deleteData,
   ListData,
   login,
-  listFamilyData
-  
+  listFamilyData,
+  checkId,
 };
