@@ -162,7 +162,7 @@ const EditFamilyData = (req, res) => {
       }
     );
   } else {
-    if (decodedToken.data.ID === req.params.id){
+    if (decodedToken.data.ID == req.params.id){
       const Id = parseInt(req.params.id);
       editfamilydata(
         Id,
