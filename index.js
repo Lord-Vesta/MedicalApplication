@@ -14,7 +14,7 @@ app.use("/api/PatientData",require("./Routes/RegisterDataRoute.js"));
 app.use("/api/login",require("./Routes/LoginRoute.js"));
 app.use("/api/FamilyData", require("./Routes/FamilyDataRoute.js"));
 app.use('/patients', require('./Routes/patientRoutes'));
-app.use("/uploads", require("./Routes/documentRoutes.js"));
+// app.use("/uploads", require("./Routes/documentRoutes.js"));
 
 
 

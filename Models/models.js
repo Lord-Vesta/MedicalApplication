@@ -30,7 +30,7 @@ const InsertintoData = (Email, passwords, roles, callback) => {
 
 const deleteData = (Id, callback) => {
   db.query(
-    "delete from CredentialData where Id =?",
+    `DELETE FROM CredentialData WHERE Id = ?;`,
     [Id],
     async (err, result) => {
       if (err) {
@@ -41,6 +41,10 @@ const deleteData = (Id, callback) => {
     }
   );
 };
+
+deleteData(1,function(result){
+    console.log(result);
+})
 
 const login = (Email, callback) => {
   db.query(
@@ -90,6 +94,102 @@ const checkId = (Id, callback) => {
   );
 };
 
+const listSpecificData = (Id, callback) => {
+  db.query(
+    `select * from FamilyData where Id = ?`,
+    [Id],
+    async (err, result) => {
+      if (err) {
+        callback({ error: "Database error" });
+      } else {
+        return callback(result);
+      }
+    }
+  );
+};
+
+const addFamilyData = (
+  ID,
+  FathersName,
+  FathersAge,
+  FathersCountry,
+  MothersName,
+  mothersAge,
+  motherCountry,
+  diabetic,
+  preDiabetic,
+  CardiacPast,
+  cardiacPresent,
+  bloodPressure,
+  callback
+) => {
+  db.query(
+    "insert into FamilyData (Id,FathersName,FathersAge,FathersCountry,MothersName,mothersAge,motherCountry,diabetic,preDiabetic,CardiacPast,cardiacPresent,bloodPressure) values (?,?,?,?,?,?,?,?,?,?,?,?)",
+    [
+      ID,
+      FathersName,
+      FathersAge,
+      FathersCountry,
+      MothersName,
+      mothersAge,
+      motherCountry,
+      diabetic,
+      preDiabetic,
+      CardiacPast,
+      cardiacPresent,
+      bloodPressure,
+    ],
+    async (err, result) => {
+      if (err) {
+        callback({ error: "Database error" });
+      } else {
+        return callback(result);
+      }
+    }
+  );
+};
+
+const editfamilydata = (
+  Id,
+  FathersName,
+  FathersAge,
+  FathersCountry,
+  MothersName,
+  mothersAge,
+  motherCountry,
+  diabetic,
+  preDiabetic,
+  CardiacPast,
+  cardiacPresent,
+  bloodPressure,
+  callback
+) => {
+  db.query(
+    `update FamilyData set FathersName =?,FathersAge =?,FathersCountry =?,MothersName =?,mothersAge =?,motherCountry =?,diabetic =?,preDiabetic =?,CardiacPast =?,cardiacPresent =?,bloodPressure =? where Id =?`,
+    [
+      FathersName,
+      FathersAge,
+      FathersCountry,
+      MothersName,
+      mothersAge,
+      motherCountry,
+      diabetic,
+      preDiabetic,
+      CardiacPast,
+      cardiacPresent,
+      bloodPressure,
+      Id,
+    ],
+    async (err, result) => {
+      if (err) {
+        callback({ error: "Database error" });
+      } else {
+        return callback(result);
+      }
+    }
+  );
+};
+
 module.exports = {
   checkAlreadyPresent,
   InsertintoData,
@@ -98,4 +198,7 @@ module.exports = {
   login,
   listFamilyData,
   checkId,
+  listSpecificData,
+  addFamilyData,
+  editfamilydata,
 };
