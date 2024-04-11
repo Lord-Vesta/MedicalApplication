@@ -30,9 +30,3 @@ module.exports = {
   generateJwt,
   verifyToken,
 };
-
-// {
-//     status : 201,
-//     message : "your message",
-//     data : //your data
-// }
