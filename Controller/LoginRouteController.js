@@ -4,30 +4,48 @@ const jwt = require("jsonwebtoken");
 const { login } = require("../Models/models");
 const { generateJwt } = require("../Utils/jwtutils");
 
-
 // @desc check login data
 // @route POST /api/login
 // @access public
-
 const loginUser = (req, res) => {
   try {
-    let { email, password } = req.body;
-    login(email, async function (result) {
+    // let { email, password } = req.body;
+    const {
+      body: { Email, Password },
+    } = req;
+    login(Email, async function (result) {
       if (result.length > 0) {
-        let userPassword = result[0].passwords;
-        let correctPassword = await bcrypt.compare(password, userPassword);
+        let userPassword = result[0].Password;
+        let correctPassword = await bcrypt.compare(Password, userPassword);
         if (correctPassword) {
-          const token = generateJwt(result[0])
-          res.status(201).json({ Status: "successfull", Token: token });
+          const token = generateJwt(result[0]);
+          res.status(200).json({
+            status: 200,
+            message: "Login successful",
+            token: token,
+          });
         } else {
-          res.status(400).json("wrong password");
+          res.status(401).json({
+            status: 401,
+            error: "Unauthorized",
+            message: "Incorrect username or password.",
+          });
         }
       } else {
-        res.status(400).json("email id not found");
+        res.status(401).json({
+          status: 401,
+          error: "Unauthorized",
+          message: "Incorrect username or password.",
+        });
       }
     });
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    res
+      .status(500)
+      .json({ 
+        status: 500, 
+        error: "Server error", 
+        message: err.message });
   }
 };
 

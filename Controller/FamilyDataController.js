@@ -17,33 +17,41 @@ const getFamilyData = (req, res) => {
     if (decodedToken.data.roles === "admin") {
       listFamilyData(async function (result) {
         if (result.length > 0) {
-          res.status(200).json({
-            status: "fetched",
+          res.status(201).json({
+            status: 201,
+            message: "data is fetched successfully",
             data: result,
           });
-        } else {
-          res.status(400).json({
-            status: "No data found",
+        } else if (result.length <= 0) {
+          console.log("result.length");
+          res.status(200).json({
+            status: 204,
+            data: result,
           });
         }
       });
-    } else {
+    } else if (decodedToken.data.roles === "user") {
       const Id = decodedToken.data.ID;
       listSpecificData(Id, async function (result) {
         if (result.length > 0) {
-          res.status(200).json({
-            status: "fetched",
+          res.status(201).json({
+            status: 201,
+            message: "data is fetched successfully",
             data: result,
           });
-        } else {
-          res.status(400).json({
-            status: "No data found",
+        } else if (result.length <= 0) {
+          res.status(204).json({
+            status: 204,
+            message: "no content is avaliable",
+            data: result,
           });
         }
       });
     }
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    res
+      .status(500)
+      .json({ status: 500, error: "Server error", message: err.message });
   }
 };
 
@@ -56,59 +64,32 @@ const AddFamilyData = (req, res) => {
     let decodedToken = verifyToken(authHeader);
     // if (decodedToken.data.roles === "user") {
     const Id = decodedToken.data.ID;
+
     listSpecificData(Id, async function (result) {
       if (result.length > 0) {
-        res.status(200).json({
-          status: "Data already exists",
+        res.status(409).json({
+          status: 409,
+          error: "data already exists",
+          message: "Family Data for this Id is already present",
         });
       } else {
-        const {
-          FathersName,
-          FathersAge,
-          FathersCountry,
-          MothersName,
-          mothersAge,
-          motherCountry,
-          diabetic,
-          preDiabetic,
-          CardiacPast,
-          cardiacPresent,
-          bloodPressure,
-        } = req.body;
-
-        addFamilyData(
-          decodedToken.data.ID,
-          FathersName,
-          FathersAge,
-          FathersCountry,
-          MothersName,
-          mothersAge,
-          motherCountry,
-          diabetic,
-          preDiabetic,
-          CardiacPast,
-          cardiacPresent,
-          bloodPressure,
-          async function (result) {
-            if (result) {
-              res.status(200).json({
-                status: "fetched",
-                data: result,
-              });
-            } else {
-              res.status(400).json({
-                status: "No data found",
-              });
-            }
+        addFamilyData(decodedToken.data.ID, req.body, async function (result) {
+          if (result) {
+            res.status(200).json({
+              status: 200,
+              message: "data is successfully added to familyData",
+              data: result,
+            });
           }
-        );
+        });
       }
     });
-    // } else {
-    //   res.status(404).json({ error: "Invalid User Role" });
-    // }
   } catch (e) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({
+      status: 500,
+      error: "Server error",
+      message: err.message,
+    });
   }
 };
 
@@ -116,38 +97,41 @@ const AddFamilyData = (req, res) => {
 // @route PUT /api/FamilyData
 // @access private
 const EditFamilyData = (req, res) => {
-  try{
-    const {
-      FathersName,
-      FathersAge,
-      FathersCountry,
-      MothersName,
-      mothersAge,
-      motherCountry,
-      diabetic,
-      preDiabetic,
-      CardiacPast,
-      cardiacPresent,
-      bloodPressure,
-    } = req.body;
+  try {
+    const Id = parseInt(req.params.id);
+    // console.log(req.body);
+    let allowedColumns = [
+      "FathersName",
+      "FathersAge",
+      "FathersCountry",
+      "MothersName",
+      "mothersAge",
+      "motherCountry",
+      "diabetic",
+      "preDiabetic",
+      "CardiacPast",
+      "cardiacPresent",
+      "bloodPressure",
+    ];
+    let stmts = [];
+    let values = [];
     const authHeader = req.headers["authorization"];
     let decodedToken = verifyToken(authHeader);
+    console.log(decodedToken);
     if (decodedToken.data.roles === "admin") {
-    const Id = parseInt(req.params.id);
-    editfamilydata(
-      Id,
-      FathersName,
-      FathersAge,
-      FathersCountry,
-      MothersName,
-      mothersAge,
-      motherCountry,
-      diabetic,
-      preDiabetic,
-      CardiacPast,
-      cardiacPresent,
-      bloodPressure,
-      async function (result) {
+      console.log(stmts);
+      console.log(values);
+      for (let c of allowedColumns) {
+        if (c in req.body) {
+          stmts.push(`${c} = ?`), values.push(req.body[c]);
+        }
+      }
+      if (stmts.length == 0) {
+        return res.sendStatus(204); //nothing to do
+      }
+
+      values.push(Id);
+      editfamilydata(stmts, values, async function (result) {
         if (result) {
           res.status(200).json({
             status: "Successfully Editted",
@@ -158,46 +142,32 @@ const EditFamilyData = (req, res) => {
             status: "No data found",
           });
         }
-      }
-    );
-  } else {
-    if (decodedToken.data.ID == req.params.id){
-      const Id = parseInt(req.params.id);
-      editfamilydata(
-        Id,
-        FathersName,
-        FathersAge,
-        FathersCountry,
-        MothersName,
-        mothersAge,
-        motherCountry,
-        diabetic,
-        preDiabetic,
-        CardiacPast,
-        cardiacPresent,
-        bloodPressure,
-        async function (result) {
+      });
+    } else {
+      if (decodedToken.data.ID == req.params.id) {
+        const Id = parseInt(req.params.id);
+        editfamilydata(Id, req.body, async function (result) {
           if (result) {
             res.status(200).json({
               status: "Successfully Editted",
+              message: "data is successfully editted",
               data: result,
             });
-          } else {
-            res.status(400).json({
-              status: "No data found",
-            });
           }
-        }
-      );
+        });
+      } else {
+        res.status(403).json({
+          status: 403,
+          error: "Invalid User Role",
+          message: "You are not authorized to perform this action.",
+        });
+      }
     }
-    else{
-      res.status(404).json({ error: "Edit your own data"});
-    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ status: 500, error: "Server error", message: err.message });
   }
-  }catch(err){
-    res.status(500).json({ error: "Server error" });
-  }
-  
 };
 
 module.exports = { getFamilyData, AddFamilyData, EditFamilyData };

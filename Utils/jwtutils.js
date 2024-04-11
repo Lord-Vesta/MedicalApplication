@@ -1,23 +1,23 @@
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
+
+const secretKey = process.env.secretKey
 
 const generateJwt = (result) => {
   const payload = {
     ID: result.Id,
     email: result.Email,
-    passwords: result.passwords,
+    passwords: result.Password,
     roles: result.roles,
   };
-
-  const secretKey = "shhhh";
   const options = { expiresIn: "1h" };
 
   return jwt.sign(payload, secretKey, options);
 };
 
 const verifyToken = (token) => {
-  const secret = "shhhh";
   try {
-    const decoded = jwt.verify(token, secret);
+    const decoded = jwt.verify(token, secretKey);
     return { success: true, data: decoded };
   } catch (error) {
     console.log(error);
@@ -28,5 +28,11 @@ const verifyToken = (token) => {
 
 module.exports = {
   generateJwt,
-  verifyToken
+  verifyToken,
 };
+
+// {
+//     status : 201,
+//     message : "your message",
+//     data : //your data
+// }

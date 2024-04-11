@@ -2,7 +2,7 @@ const db = require("../Config/config");
 
 const checkAlreadyPresent = (Email, callback) => {
   db.query(
-    "Select * from CredentialData where Email = ?",
+    "Select Id from CredentialData where Email = ?",
     [Email],
     async (err, result) => {
       if (err) {
@@ -14,10 +14,10 @@ const checkAlreadyPresent = (Email, callback) => {
   );
 };
 
-const InsertintoData = (Email, passwords, roles, callback) => {
+const insertIntoData = (Email, Password, roles, flag, callback) => {
   db.query(
-    "insert into CredentialData(Email, passwords,roles) values (?,?,?)",
-    [Email, passwords, roles],
+    "insert into CredentialData(Email, Password ,roles,flag) values (?,?,?,?)",
+    [Email, Password, roles, flag],
     async (err, result) => {
       if (err) {
         callback({ error: "Database error" });
@@ -30,7 +30,7 @@ const InsertintoData = (Email, passwords, roles, callback) => {
 
 const deleteData = (Id, callback) => {
   db.query(
-    `DELETE FROM CredentialData WHERE Id = ?;`,
+    `update CredentialData set flag = false WHERE Id = ?;`,
     [Id],
     async (err, result) => {
       if (err) {
@@ -42,9 +42,9 @@ const deleteData = (Id, callback) => {
   );
 };
 
-deleteData(1,function(result){
-    console.log(result);
-})
+deleteData(1, function (result) {
+  console.log(result);
+});
 
 const login = (Email, callback) => {
   db.query(
@@ -61,13 +61,16 @@ const login = (Email, callback) => {
 };
 
 const ListData = (callback) => {
-  db.query("select * from CredentialData", async (err, result) => {
-    if (err) {
-      callback({ error: "Database error" });
-    } else {
-      callback(result);
+  db.query(
+    "select Id,Email,roles from CredentialData where flag = true",
+    async (err, result) => {
+      if (err) {
+        callback({ error: "Database error" });
+      } else {
+        callback(result);
+      }
     }
-  });
+  );
 };
 
 const listFamilyData = (callback) => {
@@ -108,21 +111,20 @@ const listSpecificData = (Id, callback) => {
   );
 };
 
-const addFamilyData = (
-  ID,
-  FathersName,
-  FathersAge,
-  FathersCountry,
-  MothersName,
-  mothersAge,
-  motherCountry,
-  diabetic,
-  preDiabetic,
-  CardiacPast,
-  cardiacPresent,
-  bloodPressure,
-  callback
-) => {
+const addFamilyData = (ID, body, callback) => {
+  const {
+    FathersName,
+    FathersAge,
+    FathersCountry,
+    MothersName,
+    mothersAge,
+    motherCountry,
+    diabetic,
+    preDiabetic,
+    CardiacPast,
+    cardiacPresent,
+    bloodPressure,
+  } = body; 
   db.query(
     "insert into FamilyData (Id,FathersName,FathersAge,FathersCountry,MothersName,mothersAge,motherCountry,diabetic,preDiabetic,CardiacPast,cardiacPresent,bloodPressure) values (?,?,?,?,?,?,?,?,?,?,?,?)",
     [
@@ -150,36 +152,15 @@ const addFamilyData = (
 };
 
 const editfamilydata = (
-  Id,
-  FathersName,
-  FathersAge,
-  FathersCountry,
-  MothersName,
-  mothersAge,
-  motherCountry,
-  diabetic,
-  preDiabetic,
-  CardiacPast,
-  cardiacPresent,
-  bloodPressure,
+  stmts,
+  values,
   callback
+  // pass req.body if large nos of parameters
 ) => {
+  console.log(stmts, values);
   db.query(
-    `update FamilyData set FathersName =?,FathersAge =?,FathersCountry =?,MothersName =?,mothersAge =?,motherCountry =?,diabetic =?,preDiabetic =?,CardiacPast =?,cardiacPresent =?,bloodPressure =? where Id =?`,
-    [
-      FathersName,
-      FathersAge,
-      FathersCountry,
-      MothersName,
-      mothersAge,
-      motherCountry,
-      diabetic,
-      preDiabetic,
-      CardiacPast,
-      cardiacPresent,
-      bloodPressure,
-      Id,
-    ],
+    `UPDATE FamilyData SET ${stmts.join(", ")} WHERE Id = ?`,
+    values,
     async (err, result) => {
       if (err) {
         callback({ error: "Database error" });
@@ -227,7 +208,7 @@ const uploadDocument = (
 
 module.exports = {
   checkAlreadyPresent,
-  InsertintoData,
+  insertIntoData,
   deleteData,
   ListData,
   login,
