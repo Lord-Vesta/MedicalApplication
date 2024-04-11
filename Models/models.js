@@ -190,6 +190,41 @@ const editfamilydata = (
   );
 };
 
+const uploadDocument = (
+  userId,
+  aadharCardFront,
+  aadharCardBack,
+  medicalInsuranceCardFront,
+  medicalInsuranceCardBack,
+  callback
+) => {
+  console.log(aadharCardFront);
+  
+  db.query(
+    `
+    INSERT INTO UploadedDocuments (userId, aadharCardFront, aadharCardBack, medicalInsuranceCardFront, medicalInsuranceCardBack)
+    VALUES (?, ?, ?, ?, ?)
+    `,
+    [
+      userId,
+      aadharCardFront,
+      aadharCardBack,
+      medicalInsuranceCardFront,
+      medicalInsuranceCardBack,
+    ],
+    async (err, result) => {
+      if (err) {
+        console.error('Error uploading documents:', err); 
+        callback({ error: "Database error: " + err.message }); 
+      } else {
+        return callback(result);
+      }
+    }
+  );
+};
+
+
+
 module.exports = {
   checkAlreadyPresent,
   InsertintoData,
@@ -201,4 +236,6 @@ module.exports = {
   listSpecificData,
   addFamilyData,
   editfamilydata,
+  uploadDocument
 };
+
