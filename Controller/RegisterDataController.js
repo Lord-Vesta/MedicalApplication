@@ -124,15 +124,15 @@ const listRegistration = (req, res) => {
       ListData(async function (result) {
         if (result.length > 0) {
           res.status(200).json({
-            status: 204,
+            status: 200,
             data:result,
-            message: "no content is avaliable",
+            message: "user has been successfully fetched",
           });
           console.log(result.length);
         } else if (result.length <= 0) {
           res.status(201).json({
             status: 201,
-            message: "user has been successfully fetched",
+            message: "no content is avaliable",
             data: result,
           });
         }

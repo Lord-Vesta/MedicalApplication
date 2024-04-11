@@ -25,7 +25,7 @@ const getFamilyData = (req, res) => {
         } else if (result.length <= 0) {
           console.log("result.length");
           res.status(200).json({
-            status: 204,
+            status: 200,
             data: result,
           });
         }
@@ -119,8 +119,7 @@ const EditFamilyData = (req, res) => {
     let decodedToken = verifyToken(authHeader);
     console.log(decodedToken);
     if (decodedToken.data.roles === "admin") {
-      console.log(stmts);
-      console.log(values);
+
       for (let c of allowedColumns) {
         if (c in req.body) {
           stmts.push(`${c} = ?`), values.push(req.body[c]);
@@ -145,13 +144,25 @@ const EditFamilyData = (req, res) => {
       });
     } else {
       if (decodedToken.data.ID == req.params.id) {
-        const Id = parseInt(req.params.id);
-        editfamilydata(Id, req.body, async function (result) {
+        for (let c of allowedColumns) {
+          if (c in req.body) {
+            stmts.push(`${c} = ?`), values.push(req.body[c]);
+          }
+        }
+        if (stmts.length == 0) {
+          return res.sendStatus(204); //nothing to do
+        }
+  
+        values.push(Id);
+        editfamilydata(stmts, values, async function (result) {
           if (result) {
             res.status(200).json({
               status: "Successfully Editted",
-              message: "data is successfully editted",
               data: result,
+            });
+          } else {
+            res.status(400).json({
+              status: "No data found",
             });
           }
         });
