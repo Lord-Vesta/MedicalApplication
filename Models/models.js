@@ -157,7 +157,7 @@ const editfamilydata = (
   callback
   // pass req.body if large nos of parameters
 ) => {
-  console.log(stmts, values);
+  // console.log(stmts, values); 
   db.query(
     `UPDATE FamilyData SET ${stmts.join(", ")} WHERE Id = ?`,
     values,
