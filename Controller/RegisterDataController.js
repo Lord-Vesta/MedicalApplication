@@ -1,89 +1,114 @@
 const bcrypt = require("bcryptjs");
 const {
   checkAlreadyPresent,
-  InsertintoData,
+  insertIntoData,
   deleteData,
   ListData,
 } = require("../Models/models.js");
 const { verifyToken } = require("../Utils/jwtutils.js");
 
-// @desc Add registration data
+// @desc Add User registration data
 // @route POST /api/PatientData
-// @access private
-const AddRegistrationData = (req, res) => {
+// @access public
+const addRegistrationData = (req, res) => {
   try {
-    const { Email, Passwords, roles } = req.body;
+    // const { Email, Passwords } = req.body;
+    const roles = "user";
+    const flag = true;
+    const {
+      body: { Email, Password },
+    } = req;
     checkAlreadyPresent(Email, async function (result) {
-      if (result.length > 0) {
-        res.status(400).json({ error: "Email already exists" });
-      } else {
-        const myEncPassword = await bcrypt.hash(Passwords, 10);
-        InsertintoData(Email, myEncPassword, roles, async function (resut) {
-          if (resut) {
-            res.status(201).json({
-              status: "Successfully registered",
-            });
-          }
+      if (result.length) {
+        res.status(409).json({
+          status: 409,
+          error: "Email already exists",
+          message:
+            "The email address provided is already registered. Please use a different email or proceed to login.",
         });
+      } else {
+        const myEncPassword = await bcrypt.hash(Password, 10);
+        // why do we use 10? -> if more than 10 then large time or less then security
+        insertIntoData(
+          Email,
+          myEncPassword,
+          roles,
+          flag,
+          async function (resut) {
+            if (resut) {
+              res.status(201).json({
+                status: 201,
+                message: "User has been successfully registered",
+              });
+            }
+          }
+        );
       }
     });
   } catch (err) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({
+      status: 500,
+      error: "Server error",
+      message: err.message,
+    });
   }
 };
 
 // @desc Delete registered data
 // @route Delete /api/PatientData/:id
 // @access private
-const DeleteRegistrationData = (req, res) => {
+const deleteRegistrationData = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
     verifyToken(authHeader);
     let decodedToken = verifyToken(authHeader);
-    console.log(decodedToken.data.ID);
-    console.log(req.params.id);
+    const Id = parseInt(req.params.id);
 
     if (decodedToken.data.roles === "admin") {
-      const Id = parseInt(req.params.id);
-      console.log("decoded id", decodedToken.data.ID);
       deleteData(Id, async function (result) {
-        console.log("Affected rows", result.affectedRows);
         if (result.affectedRows === 0) {
-          res.status(400).json({
-            error: "Id not found",
+          res.status(404).json({
+            status: 404,
+            error: "Resource not found",
+            message:
+              "The requested resource with the provided ID was not found.",
           });
         } else {
-          console.log(result.affectedRows);
           res.status(201).json({
-            status: "successfully Deleted",
+            status: 201,
+            message: "user has been successfully deleted",
+            data: result,
           });
         }
       });
     } else if (decodedToken.data.roles === "user") {
-      console.log("yash");
-      console.log(decodedToken.data.ID == req.params.id);
       if (decodedToken.data.ID == req.params.id) {
-        
         const Id = parseInt(req.params.id);
         deleteData(Id, function (err, result) {
-          // if (err) {
-          //   console.error("Error deleting data:", err);
-          //   return res.status(500).json({ error: "Database error" });
-          // }
-          // console.log("resultUser",result);
-          // if (result.affectedRows === 0) {
-          //   return res.status(400).json({ error: "No rows deleted" });
-          // } else {
-            // console.log(result.affectedRows);
-            return res.status(200).json({ status: "Successfully deleted" });
-          // }
+          if (err) {
+            throw err;
+          } else {
+            res.status(201).json({
+              status: 201,
+              message: "user has been successfully deleted",
+              data: result,
+            });
+          }
         });
       } else {
-        return res.status(403).json({ error: "Invalid User Role" });
+        res.status(403).json({
+          status: 403,
+          error: "Invalid User Role",
+          message: "You are not authorized to perform this action.",
+        });
       }
     }
   } catch (err) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({
+      status: 500,
+      error: "Server error",
+      message: err.message,
+    });
   }
 };
 
@@ -97,24 +122,99 @@ const listRegistration = (req, res) => {
 
     if (decodedToken.data.roles === "admin") {
       ListData(async function (result) {
-        if (result.length === 0) {
-          res.status(400).json({
-            error: "No data found",
+        if (result.length > 0) {
+          res.status(200).json({
+            status: 204,
+            data:result,
+            message: "no content is avaliable",
           });
-        } else {
-          res.status(201).json(result);
+          console.log(result.length);
+        } else if (result.length <= 0) {
+          res.status(201).json({
+            status: 201,
+            message: "user has been successfully fetched",
+            data: result,
+          });
         }
       });
     } else {
-      res.status(404).json({ error: "Invalid User Role" });
+      res.status(403).json({
+        status: 403,
+        error: "Invalid User Role",
+        message: "You are not authorized to perform this action.",
+      });
     }
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({
+      status: 500,
+      error: "Server error",
+      message: err.message,
+    });
+  }
+};
+
+// @desc Delete registered data
+// @route Delete /api/PatientData/:id
+// @access private
+const addAdminRegistration = (req, res) => {
+  try {
+    // const { Email, passwords } = req.body;
+    const {
+      body: { Email, Password },
+    } = req;
+    const authHeader = req.headers["authorization"];
+    let decodedToken = verifyToken(authHeader);
+    const roles = "admin";
+    const flag = true;
+    if (decodedToken.data.roles === "admin") {
+      checkAlreadyPresent(Email, async function (result) {
+        if (result.length) {
+          // result.length true or false
+          res.status(409).json({
+            status: 409,
+            error: "Email already exists",
+            message:
+              "The email address provided is already registered. Please use a different email or proceed to login.",
+          });
+        } else {
+          const myEncPassword = await bcrypt.hash(Password, 10);
+          // why do we use 10? -> if more than 10 then large time or less then security
+          insertIntoData(
+            Email,
+            myEncPassword,
+            roles,
+            flag,
+            async function (resut) {
+              if (resut) {
+                res.status(201).json({
+                  status: 201,
+                  message: "User has been successfully registered",
+                  data:resut
+                });
+              }
+            }
+          );
+        }
+      });
+    } else {
+      res.status(403).json({
+        status: 403,
+        error: "Invalid User Role",
+        message: "You are not authorized to perform this action.",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      status: 500,
+      error: "Server error",
+      message: err.message,
+    });
   }
 };
 
 module.exports = {
+  addRegistrationData,
+  deleteRegistrationData,
   listRegistration,
-  AddRegistrationData,
-  DeleteRegistrationData,
+  addAdminRegistration,
 };

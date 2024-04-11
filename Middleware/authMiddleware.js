@@ -4,13 +4,19 @@ function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader;
   if (!token) {
-    return res.sendStatus(401);
+    return res.status(401).json({
+      status: 401,
+      message: "You are not authorized to access this API",
+    });
   }
 
   const result = verifyToken(token);
-  console.log(result.success);
   if (!result.success) {
-    return res.status(403).json({ error: result.error });
+    return res.status(403).json({
+      status: 403,
+      message: "check JWT token",
+      error: result.error,
+    });
   }
 
   req.user = result.data;
