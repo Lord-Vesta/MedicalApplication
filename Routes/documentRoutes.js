@@ -1,33 +1,39 @@
-
-// const express = require('express');
-// const router = express.Router();
-// const { uploadAadharFront, uploadAadharBack, uploadMedicalInsuranceFront, uploadMedicalInsuranceBack } = require('../Controller/documentControllers');
-
-
-// router.post('/aadhar-card/front', uploadAadharFront);
-
-// router.post('/aadhar-card/back', uploadAadharBack);
-
-
-// router.post('/medical-insurance-card/front', uploadMedicalInsuranceFront);
-
-
-// router.post('/medical-insurance-card/back', uploadMedicalInsuranceBack);
-
-// module.exports = router;
-
 const express = require('express');
 const router = express.Router();
-const { handleUploadAadharFront, handleUploadAadharBack, handleUploadMedicalInsuranceFront, handleUploadMedicalInsuranceBack } = require('../Controller/documentControllers');
+const multer = require('multer');
+const { uploadDocuments } = require('../Controller/documentControllers');
+const { authenticateToken } = require('../Middleware/authMiddleware');
+const uuid = require('uuid').v4;
 
-router.post('/aadhar-card/front', handleUploadAadharFront);
+const storageConfig = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (req, file, cb) => {
+    const { originalname } = file;
+    cb(null, `${uuid()}-${originalname}`);
+  }
+});
 
+const fileFilterConfig = (req, file, cb) => {
+  if (file.mimetype.split("/")[0] === "image") {
+    cb(null, true);
+  } else {
+    cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
+  }
+};
 
-router.post('/aadhar-card/back', handleUploadAadharBack);
+const upload = multer({
+  storage: storageConfig,
+  fileFilter: fileFilterConfig,
+  limits: { fileSize: 10000000, files: 4 }
+});
 
-
-router.post('/medical-insurance-card/front', handleUploadMedicalInsuranceFront);
-
-router.post('/medical-insurance-card/back', handleUploadMedicalInsuranceBack);
+router.post('/uploadDocuments', authenticateToken, upload.fields([
+  { name: 'aadharCardFront', maxCount: 1 }, 
+  { name: 'aadharCardBack', maxCount: 1 },
+  { name: 'medicalInsuranceCardFront', maxCount: 1 },
+  { name: 'medicalInsuranceCardBack', maxCount: 1 } 
+]), uploadDocuments);
 
 module.exports = router;

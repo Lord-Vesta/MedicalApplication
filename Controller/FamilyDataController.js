@@ -1,11 +1,10 @@
-const db = require("../Config/config");
-
 const {
   listFamilyData,
   listSpecificData,
   addFamilyData,
   editfamilydata,
 } = require("../Models/models.js");
+
 const { verifyToken } = require("../Utils/jwtutils.js");
 
 // @desc Gets all family data
