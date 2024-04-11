@@ -117,9 +117,9 @@ const EditFamilyData = (req, res) => {
     let values = [];
     const authHeader = req.headers["authorization"];
     let decodedToken = verifyToken(authHeader);
-    console.log(decodedToken);
+    // console.log(decodedToken);
     if (decodedToken.data.roles === "admin") {
-
+      console.log(req.body); 
       for (let c of allowedColumns) {
         if (c in req.body) {
           stmts.push(`${c} = ?`), values.push(req.body[c]);

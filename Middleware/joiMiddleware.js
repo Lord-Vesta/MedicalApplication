@@ -1,26 +1,70 @@
 const Joi = require("joi");
 
-const validateUser = (user) => {
+const addRegistrationDataJoi = (req, res, next) => {
   const joiSchema = Joi.object({
-    Email: Joi.string().required(),
+    Email: Joi.string().email().required(),
     Password: Joi.string().required(),
+    rePassword: Joi.ref("Password"),
   }).options({ abortEarly: false });
 
-  return joiSchema.validate(user);
+  const result = joiSchema.validate(req.body);
+
+  if (result.error) {
+    res.status(400).json({
+      status: 400,
+      error: "Bad Request",
+      message: "The request contains invalid or malformed input data.",
+    });
+  } else {
+    req.body = result.value;
+    next();
+  }
 };
 
-const user = {
-  Email: "yash",
-  Password:"1234"
-};
+const loginJoi = (req,res,next)=>{
+    const Joischema = Joi.object({
+        Email: Joi.string().email().required(),
+        Password: Joi.string().required(),
+    })
 
-response = validateUser(user);
+    const result = Joischema.validate(req.body);
 
-if(response.error) 
-{   
-    console.log(response.error.details) 
-} 
-else
-{ 
-    console.log("Validated Data") 
+    if(result.error) {
+        res.status(400).json({
+            status: 400,
+            error: "Bad Request",
+            message: "The request contains invalid or malformed input data.",
+          });
+    }
+    else{
+        next();
+    }
 }
+
+const addAdminJoi = (req,res,next)=>{
+    const Joischema = Joi.object({
+        Email: Joi.string().email().required(),
+        Password: Joi.string().required(),
+    })
+
+    const result = Joischema.validate(req.body);
+
+    if(result.error) {
+        res.status(400).json({
+            status: 400,
+            error: "Bad Request",
+            message: "The request contains invalid or malformed input data.",
+          });
+    }
+    else{
+        next();
+    }
+}
+
+
+
+module.exports = {
+  addRegistrationDataJoi,
+  loginJoi,
+  addAdminJoi
+};

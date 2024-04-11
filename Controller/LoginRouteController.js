@@ -8,6 +8,7 @@ const { generateJwt } = require("../Utils/jwtutils");
 // @route POST /api/login
 // @access public
 const loginUser = (req, res) => {
+  console.log(req.body);
   try {
     // let { email, password } = req.body;
     const {
