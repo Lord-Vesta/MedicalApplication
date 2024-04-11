@@ -124,7 +124,7 @@ const addFamilyData = (ID, body, callback) => {
     CardiacPast,
     cardiacPresent,
     bloodPressure,
-  } = body; 
+  } = body;
   db.query(
     "insert into FamilyData (Id,FathersName,FathersAge,FathersCountry,MothersName,mothersAge,motherCountry,diabetic,preDiabetic,CardiacPast,cardiacPresent,bloodPressure) values (?,?,?,?,?,?,?,?,?,?,?,?)",
     [
@@ -179,8 +179,8 @@ const uploadDocument = (
   medicalInsuranceCardBack,
   callback
 ) => {
-  console.log(aadharCardFront);
-  
+  // console.log(aadharCardFront);
+
   db.query(
     `
     INSERT INTO UploadedDocuments (userId, aadharCardFront, aadharCardBack, medicalInsuranceCardFront, medicalInsuranceCardBack)
@@ -195,8 +195,8 @@ const uploadDocument = (
     ],
     async (err, result) => {
       if (err) {
-        console.error('Error uploading documents:', err); 
-        callback({ error: "Database error: " + err.message }); 
+        console.error('Error uploading documents:', err);
+        // callback({ error: "Database error: " + err.message });
       } else {
         return callback(result);
       }
@@ -205,6 +205,21 @@ const uploadDocument = (
 };
 
 
+const updateDocumentsModel = (
+  updateKey,
+  updateValues,
+  callback
+) => {
+  db.query(`update UploadedDocuments set ${updateKey.join(", ")} where userId=?`, updateValues,
+  (err, result) => {
+    if (err) {
+      callback({ error: "Database error: " + err.message });
+    } else {
+      return callback(result);
+    }
+  }
+  );
+};
 
 module.exports = {
   checkAlreadyPresent,
@@ -217,6 +232,7 @@ module.exports = {
   listSpecificData,
   addFamilyData,
   editfamilydata,
-  uploadDocument
+  uploadDocument,
+  updateDocumentsModel
 };
 
