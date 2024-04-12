@@ -84,9 +84,14 @@ const deleteRegistrationData = (req, res) => {
     } else if (decodedToken.data.roles === "user") {
       if (decodedToken.data.ID == req.params.id) {
         const Id = parseInt(req.params.id);
-        deleteData(Id, function (err, result) {
-          if (err) {
-            throw err;
+        deleteData(Id, async function (result) {
+          if (result.affectedRows === 0) {
+            res.status(404).json({
+              status: 404,
+              error: "Resource not found",
+              message:
+                "The requested resource with the provided ID was not found.",
+            });
           } else {
             res.status(201).json({
               status: 201,
@@ -94,12 +99,6 @@ const deleteRegistrationData = (req, res) => {
               data: result,
             });
           }
-        });
-      } else {
-        res.status(403).json({
-          status: 403,
-          error: "Invalid User Role",
-          message: "You are not authorized to perform this action.",
         });
       }
     }

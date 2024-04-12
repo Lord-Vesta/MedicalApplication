@@ -179,7 +179,7 @@ const uploadDocument = (
   medicalInsuranceCardBack,
   callback
 ) => {
-  console.log(aadharCardFront);
+  // console.log(aadharCardFront);
   
   db.query(
     `
@@ -203,7 +203,6 @@ const uploadDocument = (
     }
   );
 };
-
 
 
 module.exports = {
