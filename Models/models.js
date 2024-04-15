@@ -167,8 +167,6 @@ export const editfamilydata = (
     }
   );
 };
-
-
 export const getPatientPersonalData = (callback) => {
   db.query("select * from personalInfo", async (err, result) => {
     if (err) {
@@ -260,8 +258,6 @@ export const updatePatientPersonalDataDb = (
   );
 };
 
-
-
 export const ListSpecificUploadedDoc = (Id, callback) => {
   db.query(
     `select * from UploadedDocuments where Id = ?`,
@@ -275,13 +271,12 @@ export const ListSpecificUploadedDoc = (Id, callback) => {
     }
   );
 };
-
 export const uploadDocument = (
   Id,
-  aadharCardFrontPath,
-  aadharCardBackPath,
-  medicalInsuranceCardFrontPath,
-  medicalInsuranceCardBackPath,
+  aadharCardFront,
+  aadharCardBack,
+  medicalInsuranceCardFront,
+  medicalInsuranceCardBack,
   callback
 ) => {
   db.query(
@@ -291,22 +286,21 @@ export const uploadDocument = (
     `,
     [
       Id,
-      aadharCardFrontPath,
-      aadharCardBackPath,
-      medicalInsuranceCardFrontPath,
-      medicalInsuranceCardBackPath,
+      aadharCardFront,
+      aadharCardBack,
+      medicalInsuranceCardFront,
+      medicalInsuranceCardBack,
     ],
-    (err, result) => {
+    async (err, result) => {
       if (err) {
         console.error('Error uploading documents:', err);
-        callback({ error: "Database error: " + err.message });
+        // callback({ error: "Database error: " + err.message });
       } else {
-        callback(result);
+        return callback(result);
       }
     }
   );
 };
-
 
 
 
@@ -326,18 +320,4 @@ export const updateDocumentsModel = (
   );
 };
 
-// module.exports = {
-//   checkAlreadyPresent,
-//   insertIntoData,
-//   deleteData,
-//   ListData,
-//   login,
-//   listFamilyData,
-//   checkId,
-//   listSpecificData,
-//   addFamilyData,
-//   editfamilydata,
-//   uploadDocument,
-//   updateDocumentsModel
-// };
 

@@ -17,7 +17,7 @@ export const router = express.Router();
 
 
 
-const storageConfig = multer.diskStorage({
+export const storageConfig = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads");
   },
@@ -27,7 +27,7 @@ const storageConfig = multer.diskStorage({
   }
 });
 
-const fileFilterConfig = (req, file, cb) => {
+export const fileFilterConfig = (req, file, cb) => {
   if (file.mimetype.split("/")[0] === "image") {
     cb(null, true);
   } else {
@@ -35,7 +35,7 @@ const fileFilterConfig = (req, file, cb) => {
   }
 };
 
-const upload = multer({
+export const upload = multer({
   storage: storageConfig,
   fileFilter: fileFilterConfig,
   limits: { fileSize: 10000000, files: 4 }

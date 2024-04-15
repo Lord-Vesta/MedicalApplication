@@ -1,14 +1,9 @@
-const {
-    getPatientPersonalData,
-    listSpecificPatientData,
-    createPatientDb,
-    updatePatientPersonalDataDb
 
-} = require("../Models/models.js");
+import{getPatientPersonalData,listSpecificPatientData,createPatientDb,updatePatientPersonalDataDb} from "../Models/models.js"
 
-const { verifyToken } = require("../Utils/jwtutils.js");
+import { verifyToken } from "../Utils/jwtutils.js";
 
-const getPatientData = (req, res) => {
+export const getPatientData = (req, res) => {
     try {
         const authHeader = req.headers["authorization"];
         let decodedToken = verifyToken(authHeader);
@@ -52,7 +47,7 @@ const getPatientData = (req, res) => {
 
 
     
-const CreatePatient = (req, res) => {
+export const CreatePatient = (req, res) => {
     try {
         const authHeader = req.headers["authorization"];
         let decodedToken = verifyToken(authHeader);
@@ -89,7 +84,7 @@ const CreatePatient = (req, res) => {
 };
 
 
-const UpdatePatientPersonalData = (req, res) => {
+export const UpdatePatientPersonalData = (req, res) => {
     try {
         const Id = parseInt(req.params.id);
         let allColumns = [
@@ -165,7 +160,7 @@ const UpdatePatientPersonalData = (req, res) => {
     }
 };
 
-module.exports = { getPatientData, CreatePatient, UpdatePatientPersonalData }
+// module.exports = { getPatientData, CreatePatient, UpdatePatientPersonalData }
 
 
 
