@@ -1,13 +1,13 @@
 // routes/patientRoutes.js
 const express = require('express');
 const router = express.Router();
-const { getPatientPersonalData, updatePatientPersonalData, createPatient } = require('../Controller/patientControllers');
+const { getPatientData, UpdatePatientPersonalData, CreatePatient } = require('../Controller/patientControllers');
+const { authenticateToken } = require("../Middleware/authMiddleware.js");
 
 
 
-
-router.get('/', getPatientPersonalData);
-router.post('/', createPatient);
-router.put('/:id', updatePatientPersonalData);
+router.get('/',authenticateToken, getPatientData);
+router.post('/',authenticateToken, CreatePatient);
+router.put('/:id',authenticateToken, UpdatePatientPersonalData);
 
 module.exports = router;
