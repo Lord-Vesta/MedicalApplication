@@ -14,10 +14,10 @@ import {generateJwt} from "../Utils/jwtutils.js"
 export const loginUser = (req, res) => {
   console.log(req.body);
   try {
-    // let { email, password } = req.body;
     const {
       body: { Email, Password },
     } = req;
+    console.log(login);
     login(Email, async function (result) {
       if (result.length > 0) {
         let userPassword = result[0].Password;

@@ -1,6 +1,5 @@
 
 import{getPatientPersonalData,listSpecificPatientData,createPatientDb,updatePatientPersonalDataDb} from "../Models/models.js"
-
 import { verifyToken } from "../Utils/jwtutils.js";
 
 export const getPatientData = (req, res) => {

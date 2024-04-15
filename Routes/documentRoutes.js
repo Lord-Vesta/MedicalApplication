@@ -8,7 +8,7 @@
 
 import express from 'express';
 import multer from 'multer';
-import {uploadDocuments} from "../Controller/documentControllers.js"
+import {uploadDocuments,updateDocuments} from "../Controller/documentControllers.js"
 import {authenticateToken} from "../Middleware/authMiddleware.js"
 import { v4 as uuid } from 'uuid';
 
