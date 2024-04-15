@@ -1,56 +1,60 @@
-const db = require("../Config/config");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+// const bcrypt = require("bcryptjs");
+// const { login } = require("../Models/models");
+// const { generateJwt } = require("../Utils/jwtutils");
+
+import bcrypt from "bcryptjs"
+import {login} from "../Models/models.js"
+import {generateJwt} from "../Utils/jwtutils.js"
+
 
 // @desc check login data
 // @route POST /api/login
 // @access public
 
-const login = (req, res) => {
-  let { email, password } = req.body;
-  console.log(email);
-  let q = `select * from CredentialData where Email = ?`;
-  db.query(q, [email], async (err, data) => {
-    if (err) return res.json(err);
-    else {
-      if (data.length > 0) {
-        let userPassword = data[0].passwords;
-        let correctPassword = await bcrypt.compare(password, userPassword);
+export const loginUser = (req, res) => {
+  console.log(req.body);
+  try {
+    // let { email, password } = req.body;
+    const {
+      body: { Email, Password },
+    } = req;
+    login(Email, async function (result) {
+      if (result.length > 0) {
+        let userPassword = result[0].Password;
+        let correctPassword = await bcrypt.compare(Password, userPassword);
         if (correctPassword) {
-          const token = jwt.sign(
-            { ID:data[0].Id, email: data[0].Email, passwords: data[0].passwords },
-            "shhhh",
-            {
-              expiresIn: "2h",
-            }
-          );
-          res.json({Status:"successfull",
-           Token:token});
-          //   let Id = data[0].Id;
-          //   db.query(
-          //     `update CredentialData set token = ? where Id = ${Id}`,
-          //     [token],
-          //     (error, results) => {
-          //       if (error) {
-          //         res.status(404).json({ error: error });
-          //       } else {
-          //         res.status(201).json({
-          //           result: results,
-          //         });
-          //         console.log(results);
-          //       }
-          //     }
-          //   );
+          const token = generateJwt(result[0]);
+          res.status(200).json({
+            status: 200,
+            message: "Login successful",
+            token: token,
+          });
         } else {
-          res.json("wrong password");
+          res.status(401).json({
+            status: 401,
+            error: "Unauthorized",
+            message: "Incorrect username or password.",
+          });
         }
       } else {
-        res.json("wrong email");
+        res.status(401).json({
+          status: 401,
+          error: "Unauthorized",
+          message: "Incorrect username or password.",
+        });
       }
-    }
-  });
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ 
+        status: 500, 
+        error: "Server error", 
+        message: err.message });
+  }
 };
 
-module.exports = {
-  login,
-};
+// module.exports = {
+//   loginUser,
+// };
+
