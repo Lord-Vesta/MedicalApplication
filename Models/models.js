@@ -30,38 +30,18 @@ export const insertIntoData = (Email, Password, roles, flag, callback) => {
 };
 
 export const deleteData = asyncHandler(async(Id, callback) => {
+  db.query(
+    `update CredentialData set flag = false WHERE Id = ?;`,
+    [Id],
+    async (err, result) => {
+      if (err) {
+        callback({ error: "Database error" });
+      } else {
+        return callback(result);
+      }
+    }
+  );
 
-  // const transaction = await db.transaction();
-  // // db.query(
-  // //   `update CredentialData set flag = false WHERE Id = ?;`,
-  // //   [Id],
-  // //   async (err, result) => {
-  // //     if (err) {
-  // //       callback({ error: "Database error" });
-  // //     } else {
-  // //       return callback(result);
-  // //     }
-  // //   }
-  // // );
-  try{
-
-  await Promise.all([
-    db.query('update CredentialData set flag = false WHERE Id = ?', [Id], { transaction }),
-    db.query('update personalInfo set flag = false WHERE Id = ?', [Id], { transaction }),
-    db.query('update FamilyData set flag = false WHERE Id = ?', [Id], { transaction }),
-    db.query('update UploadedDocuments set flag = false WHERE Id = ?', [Id], { transaction }),
-  ]);
-
-  await transaction.commit();
-
-  callback(null, { message: 'Data soft deleted successfully' });
-  }
-  catch (error) {
-    // Rollback the transaction on error
-    await transaction.rollback();
-
-    callback({ error: 'Database error during soft deletion' });
-  }
 });
 
 
