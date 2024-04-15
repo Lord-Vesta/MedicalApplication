@@ -12,6 +12,7 @@ import {router as documentRoutes} from "./Routes/documentRoutes.js";
 const app = express();
 app.use(express.json());
 
+
 const port = process.env.PORT || 3000;
 
 // app.use(express.json());

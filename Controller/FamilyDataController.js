@@ -10,9 +10,11 @@ import {verifyToken} from "../Utils/jwtutils.js";
 
 // const { verifyToken } = require("../Utils/jwtutils.js");
 
+
 // @desc Gets all family data
 // @route GET /api/FamilyData
 // @access private
+
 export const getFamilyData = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
@@ -56,11 +58,13 @@ export const getFamilyData = (req, res) => {
       .status(500)
       .json({ status: 500, error: "Server error", message: err.message });
   }
+
 };
 
 // @desc Add family data
 // @route POST /api/FamilyData
 // @access private
+
 export const AddFamilyData = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
@@ -94,6 +98,7 @@ export const AddFamilyData = (req, res) => {
       message: err.message,
     });
   }
+
 };
 
 // @desc Edit family data
