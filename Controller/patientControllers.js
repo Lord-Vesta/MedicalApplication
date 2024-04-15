@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken"
 
 export const getPatientPersonalData = (req, res) => {
     db.query(
-        "SELECT * FROM personalInfo",
+        " ",
         (error, results) => {
             if (error) {
 

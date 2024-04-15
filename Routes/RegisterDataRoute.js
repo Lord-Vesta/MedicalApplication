@@ -15,7 +15,7 @@ export const router = express.Router()
 router.get('/',authenticateToken,listRegistration)
 router.post('/' ,addRegistrationDataJoi,addRegistrationData)
 router.post('/admin' ,authenticateToken,addAdminJoi,addAdminRegistration)
-router.delete('/:id',authenticateToken ,deleteRegistrationData)
+router.delete('/',authenticateToken ,deleteRegistrationData)
 
 
 // module.exports = router;
