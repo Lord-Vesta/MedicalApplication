@@ -1,13 +1,16 @@
-const db = require("../Config/config");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { login } = require("../Models/models");
-const { generateJwt } = require("../Utils/jwtutils");
+
+// const bcrypt = require("bcryptjs");
+// const { login } = require("../Models/models");
+// const { generateJwt } = require("../Utils/jwtutils");
+
+import bcrypt from "bcryptjs"
+import {login} from "../Models/models.js"
+import {generateJwt} from "../Utils/jwtutils.js"
 
 // @desc check login data
 // @route POST /api/login
 // @access public
-const loginUser = (req, res) => {
+export const loginUser = (req, res) => {
   console.log(req.body);
   try {
     // let { email, password } = req.body;
@@ -50,6 +53,6 @@ const loginUser = (req, res) => {
   }
 };
 
-module.exports = {
-  loginUser,
-};
+// module.exports = {
+//   loginUser,
+// };

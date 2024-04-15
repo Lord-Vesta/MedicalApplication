@@ -1,9 +1,20 @@
-const express = require('express');
-const router = express.Router();
-const multer = require('multer');
-const { uploadDocuments } = require('../Controller/documentControllers');
-const { authenticateToken } = require('../Middleware/authMiddleware');
-const uuid = require('uuid').v4;
+// const express = require('express');
+// const router = express.Router();
+// const multer = require('multer');
+// const { uploadDocuments } = require('../Controller/documentControllers');
+// const { authenticateToken } = require('');
+// const uuid = require('uuid').v4;
+
+import express from 'express';
+import multer from 'multer';
+import {uploadDocuments} from "../Controller/documentControllers.js"
+import {authenticateToken} from "../Middleware/authMiddleware.js"
+import { v4 as uuid } from 'uuid';
+
+
+export const router = express.Router();
+
+
 
 const storageConfig = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -36,4 +47,4 @@ router.post('/uploadDocuments', authenticateToken, upload.fields([
   { name: 'medicalInsuranceCardBack', maxCount: 1 } 
 ]), uploadDocuments);
 
-module.exports = router;
+// module.exports = router;

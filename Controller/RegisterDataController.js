@@ -1,16 +1,25 @@
-const bcrypt = require("bcryptjs");
-const {
-  checkAlreadyPresent,
+// const bcrypt = require("bcryptjs");
+// const {
+//   checkAlreadyPresent,
+//   insertIntoData,
+//   deleteData,
+//   ListData,
+// } = require("../Models/models.js");
+// const { verifyToken } = require("../Utils/jwtutils.js");
+
+import {checkAlreadyPresent,
   insertIntoData,
   deleteData,
-  ListData,
-} = require("../Models/models.js");
-const { verifyToken } = require("../Utils/jwtutils.js");
+  ListData} from "../Models/models.js";
+import {verifyToken} from "../Utils/jwtutils.js";
+import bcrypt from "bcryptjs"; 
+
+
 
 // @desc Add User registration data
 // @route POST /api/PatientData
 // @access public
-const addRegistrationData = (req, res) => {
+export const addRegistrationData = (req, res) => {
   try {
     // const { Email, Passwords } = req.body;
     const roles = "user";
@@ -57,7 +66,7 @@ const addRegistrationData = (req, res) => {
 // @desc Delete registered data
 // @route Delete /api/PatientData/:id
 // @access private
-const deleteRegistrationData = (req, res) => {
+export const deleteRegistrationData = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
     verifyToken(authHeader);
@@ -114,7 +123,7 @@ const deleteRegistrationData = (req, res) => {
 // @desc Delete registered data
 // @route Delete /api/PatientData/:id
 // @access private
-const listRegistration = (req, res) => {
+export const listRegistration = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
     let decodedToken = verifyToken(authHeader);
@@ -155,7 +164,7 @@ const listRegistration = (req, res) => {
 // @desc Delete registered data
 // @route Delete /api/PatientData/:id
 // @access private
-const addAdminRegistration = (req, res) => {
+export const addAdminRegistration = (req, res) => {
   try {
     // const { Email, passwords } = req.body;
     const {
@@ -211,9 +220,9 @@ const addAdminRegistration = (req, res) => {
   }
 };
 
-module.exports = {
-  addRegistrationData,
-  deleteRegistrationData,
-  listRegistration,
-  addAdminRegistration,
-};
+// module.exports = {
+//   addRegistrationData,
+//   deleteRegistrationData,
+//   listRegistration,
+//   addAdminRegistration,
+// };

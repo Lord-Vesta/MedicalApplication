@@ -1,7 +1,9 @@
-const { uploadDocument } = require("../Models/models.js");
-const { verifyToken } = require('../Utils/jwtutils');
+import {uploadDocument} from "../Models/models.js"
+import {verifyToken} from "../Utils/jwtutils.js"
 
-const uploadDocuments = async (req, res) => {
+// console.log(uploadDocument);
+
+export const uploadDocuments = async (req, res) => {
   try {
 
     const authHeader = req.headers["authorization"];
@@ -54,6 +56,6 @@ const uploadDocuments = async (req, res) => {
   } 
 };
 
-module.exports = {
-  uploadDocuments
-};
+// module.exports = {
+//   uploadDocuments
+// };

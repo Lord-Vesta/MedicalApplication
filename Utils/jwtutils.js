@@ -1,9 +1,11 @@
-const jwt = require("jsonwebtoken");
-require('dotenv').config();
+// const jwt = require("jsonwebtoken");
+import jsonwebtoken from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
-const secretKey = process.env.secretKey
+export const secretKey = process.env.secretKey
 
-const generateJwt = (result) => {
+export const generateJwt = (result) => {
   const payload = {
     ID: result.Id,
     email: result.Email,
@@ -12,12 +14,12 @@ const generateJwt = (result) => {
   };
   const options = { expiresIn: "1h" };
 
-  return jwt.sign(payload, secretKey, options);
+  return jsonwebtoken.sign(payload, secretKey, options);
 };
 
-const verifyToken = (token) => {
+export const verifyToken = (token) => {
   try {
-    const decoded = jwt.verify(token, secretKey);
+    const decoded = jsonwebtoken.verify(token, secretKey);
     return { success: true, data: decoded };
   } catch (error) {
     console.log(error);
@@ -26,7 +28,7 @@ const verifyToken = (token) => {
 };
 
 
-module.exports = {
-  generateJwt,
-  verifyToken,
-};
+// module.exports = {
+//   generateJwt,
+//   verifyToken,
+// };
