@@ -1,53 +1,11 @@
-// const { updateDocumentsModel, uploadDocument } = require("../Models/models.js");
-// const { verifyToken } = require('../Utils/jwtutils');
-// const multer = require('multer');
 
+import  multer from "multer";
+import { v4 as uuidv4 } from 'uuid';
+// const uuidv4 = uuidv4();
+import {uploadDocument,ListSpecificUploadedDoc,updateDocumentsModel,}  from '../Models/models.js';
+import { verifyToken }  from "../Utils/jwtutils.js";
 
-
-// const uploadDocuments=async(req,res)=>{
-//     try{
-//     const authHeader = req.headers["authorization"];
-//     const decodedToken = verifyToken(authHeader);
-//     const Id = decodedToken.data.ID;
-
-
-//     uploadDocument{
-//       Id,
-//       Object.values(req.files)[0][0].path,
-//       Object.values(req.files)[1][0].path,
-//       Object.values(req.files)[2][0].path,
-//       Object.values(req.files)[3][0].path,
-//       (result,err)=>{
-//         if (err) {
-//             console.error('Error uploading documents:', err);
-//             return res.status(500).json({
-//             status: 500,
-//             error: 'Database error',
-//             message: 'Failed to upload documents to the database'
-//             });
-//       }
-//       else{
-//         return res.status(201).json({
-//                         status: 201,
-//                         message: 'Files uploaded and stored in the database successfully!'
-//             });
-//       }
-//     }
-
-//     }
-// } catch(err){
-//     console.error("Error uploading documents:", err);
-//     res.status(500).json({ message: "Internal server error." });
-// }
-
-// };
-// =======================================================
-const multer = require('multer');
-const { v4: uuidv4 } = require('uuid');
-const {uploadDocument,ListSpecificUploadedDoc,updateDocumentsModel} = require('../Models/models');
-const { verifyToken } = require("../Utils/jwtutils");
-
-const storage = multer.diskStorage({
+ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploadedDocuments/'); 
   },
@@ -58,7 +16,7 @@ const storage = multer.diskStorage({
 });
 
 
-const fileFilter = function (req, file, cb) {
+ const fileFilter = function (req, file, cb) {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'application/pdf') {
     cb(null, true); 
   } else {
@@ -67,7 +25,7 @@ const fileFilter = function (req, file, cb) {
 };
 
 
-const upload = multer({
+ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
@@ -179,7 +137,7 @@ const upload = multer({
 //     });
 //   }
 // }
-const uploadDocuments = (req, res) => {
+export const uploadDocuments = (req, res) => {
     try {
       const authHeader = req.headers["authorization"];
       const decodedToken = verifyToken(authHeader);
@@ -342,7 +300,7 @@ export const updateDocuments = (req, res) => {
   }
 };
 
-module.exports = {uploadDocuments,updateDocuments};
+// module.exports = {uploadDocuments,updateDocuments};
 
 
 
