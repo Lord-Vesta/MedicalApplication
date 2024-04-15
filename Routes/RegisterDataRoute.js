@@ -6,7 +6,7 @@
 
 
 import express from 'express'
-import {addRegistrationData, deleteRegistrationData,listRegistration,addAdminRegistration} from "../Controller/RegisterDataController.js"
+import {addRegistrationData, deleteRegistrationData,listRegistration,addAdminRegistration,deleteUserRegistrationData} from "../Controller/RegisterDataController.js"
 import {authenticateToken} from "../Middleware/authMiddleware.js"
 import {addRegistrationDataJoi,addAdminJoi} from "../Middleware/joiMiddleware.js"
 
@@ -16,7 +16,8 @@ export const router = express.Router()
 router.get('/',authenticateToken,listRegistration)
 router.post('/' ,addRegistrationDataJoi,addRegistrationData)
 router.post('/admin' ,authenticateToken,addAdminJoi,addAdminRegistration)
-router.delete('/',authenticateToken ,deleteRegistrationData)
+router.delete('/:id',authenticateToken ,deleteRegistrationData)
+router.delete('/',authenticateToken ,deleteUserRegistrationData)
 
 
 // module.exports = router;
