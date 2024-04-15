@@ -12,6 +12,7 @@ export const authenticateToken = (req, res, next) => {
   }
 
   const result = verifyToken(token);
+ 
   if (!result.success) {
     return res.status(403).json({
       status: 403,

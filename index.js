@@ -22,6 +22,8 @@ app.use("/api/FamilyData", FamilyDataRoute);
 app.use("/patients", patientRoutes);
 app.use("/uploads", documentRoutes);
 
+
+
 app.listen(port, () => {
   console.log(`server running on port ${port}`);
 });
