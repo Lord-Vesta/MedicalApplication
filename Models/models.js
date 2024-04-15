@@ -1,6 +1,6 @@
-const db = require("../Config/config");
+import {db} from "../Config/config.js"
 
-const checkAlreadyPresent = (Email, callback) => {
+export const checkAlreadyPresent = (Email, callback) => {
   db.query(
     "Select Id from CredentialData where Email = ?",
     [Email],
@@ -14,7 +14,7 @@ const checkAlreadyPresent = (Email, callback) => {
   );
 };
 
-const insertIntoData = (Email, Password, roles, flag, callback) => {
+export const insertIntoData = (Email, Password, roles, flag, callback) => {
   db.query(
     "insert into CredentialData(Email, Password ,roles,flag) values (?,?,?,?)",
     [Email, Password, roles, flag],
@@ -28,7 +28,7 @@ const insertIntoData = (Email, Password, roles, flag, callback) => {
   );
 };
 
-const deleteData = (Id, callback) => {
+export const deleteData = (Id, callback) => {
   db.query(
     `update CredentialData set flag = false WHERE Id = ?;`,
     [Id],
@@ -42,11 +42,8 @@ const deleteData = (Id, callback) => {
   );
 };
 
-deleteData(1, function (result) {
-  console.log(result);
-});
 
-const login = (Email, callback) => {
+export const login = (Email, callback) => {
   db.query(
     "select * from CredentialData where Email =?",
     [Email],
@@ -60,7 +57,7 @@ const login = (Email, callback) => {
   );
 };
 
-const ListData = (callback) => {
+export const ListData = (callback) => {
   db.query(
     "select Id,Email,roles from CredentialData where flag = true",
     async (err, result) => {
@@ -73,7 +70,7 @@ const ListData = (callback) => {
   );
 };
 
-const listFamilyData = (callback) => {
+export const listFamilyData = (callback) => {
   db.query("select * from FamilyData", async (err, result) => {
     if (err) {
       callback({ error: "Database error" });
@@ -83,7 +80,7 @@ const listFamilyData = (callback) => {
   });
 };
 
-const checkId = (Id, callback) => {
+export const checkId = (Id, callback) => {
   db.query(
     "select * from CredentialData where Id = ?",
     [Id],
@@ -97,7 +94,7 @@ const checkId = (Id, callback) => {
   );
 };
 
-const listSpecificData = (Id, callback) => {
+export const listSpecificData = (Id, callback) => {
   db.query(
     `select * from FamilyData where Id = ?`,
     [Id],
@@ -111,7 +108,7 @@ const listSpecificData = (Id, callback) => {
   );
 };
 
-const addFamilyData = (ID, body, callback) => {
+export const addFamilyData = (ID, body, callback) => {
   const {
     FathersName,
     FathersAge,
@@ -151,7 +148,7 @@ const addFamilyData = (ID, body, callback) => {
   );
 };
 
-const editfamilydata = (
+export const editfamilydata = (
   stmts,
   values,
   callback
@@ -171,7 +168,7 @@ const editfamilydata = (
   );
 };
 
-const uploadDocument = (
+export const uploadDocument = (
   userId,
   aadharCardFront,
   aadharCardBack,
@@ -179,8 +176,6 @@ const uploadDocument = (
   medicalInsuranceCardBack,
   callback
 ) => {
-  // console.log(aadharCardFront);
-
   db.query(
     `
     INSERT INTO UploadedDocuments (userId, aadharCardFront, aadharCardBack, medicalInsuranceCardFront, medicalInsuranceCardBack)
@@ -205,7 +200,8 @@ const uploadDocument = (
 };
 
 
-const updateDocumentsModel = (
+
+export const updateDocumentsModel = (
   updateKey,
   updateValues,
   callback
@@ -221,18 +217,4 @@ const updateDocumentsModel = (
   );
 };
 
-module.exports = {
-  checkAlreadyPresent,
-  insertIntoData,
-  deleteData,
-  ListData,
-  login,
-  listFamilyData,
-  checkId,
-  listSpecificData,
-  addFamilyData,
-  editfamilydata,
-  uploadDocument,
-  updateDocumentsModel
-};
 

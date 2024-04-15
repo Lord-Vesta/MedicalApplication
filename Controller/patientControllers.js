@@ -1,7 +1,10 @@
-const db = require('../Config/config.js');
-const jwt = require("jsonwebtoken");
+// const db = require('../Config/config.js');
+// const jwt = require("jsonwebtoken");
 
-const getPatientPersonalData = (req, res) => {
+import {db} from "../Config/config.js"
+import jwt from "jsonwebtoken"
+
+export const getPatientPersonalData = (req, res) => {
     db.query(
         "SELECT * FROM personalInfo",
         (error, results) => {
@@ -15,7 +18,7 @@ const getPatientPersonalData = (req, res) => {
         });
 };
 
-const createPatient = (req, res) => {
+export const createPatient = (req, res) => {
     try {
         let token = req.headers.authorization;
         const decoded = jwt.verify(token, "shhhh");
@@ -60,7 +63,7 @@ const createPatient = (req, res) => {
     }
 };
 
-const updatePatientPersonalData = (req, res) => {
+export const updatePatientPersonalData = (req, res) => {
     const patientId = req.params.id;
     const { firstName, lastName, mobileNumber, dateOfBirth, weight, height, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription } = req.body;
 
@@ -88,4 +91,4 @@ const updatePatientPersonalData = (req, res) => {
     );
 };
 
-module.exports = {getPatientPersonalData,updatePatientPersonalData,createPatient}
+// module.exports = {getPatientPersonalData,updatePatientPersonalData,createPatient}

@@ -1,7 +1,10 @@
-const { updateDocumentsModel } = require("../Models/models.js");
-const { verifyToken } = require('../Utils/jwtutils');
 
-const uploadDocuments = async (req, res) => {
+import {uploadDocument} from "../Models/models.js"
+import {verifyToken} from "../Utils/jwtutils.js"
+
+// console.log(uploadDocument);
+
+export const uploadDocuments = async (req, res) => {
   try {
 
     const authHeader = req.headers["authorization"];
@@ -54,8 +57,7 @@ const uploadDocuments = async (req, res) => {
   }
 };
 
-
-const updateDocuments = (req, res) => {
+export const updateDocuments = (req, res) => {
   try {
     const Id = parseInt(req.params.id);
     let allColumns = [
@@ -120,6 +122,4 @@ const updateDocuments = (req, res) => {
     // res.status(500).json({status:500,error:"Server error",message:err.message});
   }
 };
-module.exports = {
-  uploadDocuments, updateDocuments
-};
+

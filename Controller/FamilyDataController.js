@@ -1,16 +1,19 @@
-const {
-  listFamilyData,
-  listSpecificData,
-  addFamilyData,
-  editfamilydata,
-} = require("../Models/models.js");
+// const {
+//   listFamilyData,
+//   listSpecificData,
+//   addFamilyData,
+//   editfamilydata,
+// } = require("../Models/models.js");
 
-const { verifyToken } = require("../Utils/jwtutils.js");
+import {listFamilyData,listSpecificData,addFamilyData,editfamilydata} from "../Models/models.js";
+import {verifyToken} from "../Utils/jwtutils.js";
+
+// const { verifyToken } = require("../Utils/jwtutils.js");
 
 // @desc Gets all family data
 // @route GET /api/FamilyData
 // @access private
-const getFamilyData = (req, res) => {
+export const getFamilyData = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
     let decodedToken = verifyToken(authHeader);
@@ -58,7 +61,7 @@ const getFamilyData = (req, res) => {
 // @desc Add family data
 // @route POST /api/FamilyData
 // @access private
-const AddFamilyData = (req, res) => {
+export const AddFamilyData = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
     let decodedToken = verifyToken(authHeader);
@@ -96,7 +99,7 @@ const AddFamilyData = (req, res) => {
 // @desc Edit family data
 // @route PUT /api/FamilyData
 // @access private
-const EditFamilyData = (req, res) => {
+export const EditFamilyData = (req, res) => {
   try {
     const Id = parseInt(req.params.id);
     // console.log(req.body);
@@ -182,4 +185,4 @@ const EditFamilyData = (req, res) => {
   }
 };
 
-module.exports = { getFamilyData, AddFamilyData, EditFamilyData };
+// module.exports = { getFamilyData, AddFamilyData, EditFamilyData };

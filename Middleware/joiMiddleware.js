@@ -1,6 +1,7 @@
-const Joi = require("joi");
+// const Joi = require("joi");
+import Joi from "joi"
 
-const addRegistrationDataJoi = (req, res, next) => {
+export const addRegistrationDataJoi = (req, res, next) => {
   const joiSchema = Joi.object({
     Email: Joi.string().email().required(),
     Password: Joi.string().required(),
@@ -21,7 +22,7 @@ const addRegistrationDataJoi = (req, res, next) => {
   }
 };
 
-const loginJoi = (req, res, next) => {
+export const loginJoi = (req, res, next) => {
   const Joischema = Joi.object({
     Email: Joi.string().email().required(),
     Password: Joi.string().required(),
@@ -40,7 +41,7 @@ const loginJoi = (req, res, next) => {
   }
 };
 
-const addAdminJoi = (req, res, next) => {
+export const addAdminJoi = (req, res, next) => {
   const Joischema = Joi.object({
     Email: Joi.string().email().required(),
     Password: Joi.string().required(),
@@ -60,7 +61,7 @@ const addAdminJoi = (req, res, next) => {
   }
 };
 
-const editFamilyDataJoi = (req,res,next)=>{
+export const editFamilyDataJoi = (req,res,next)=>{
   const joiSchema = Joi.object({
     FathersName: Joi.string(),
     FathersAge: Joi.number(),
@@ -89,7 +90,7 @@ const editFamilyDataJoi = (req,res,next)=>{
   }
 }
 
-const addFamilyDataJoi = (req,res,next)=>{
+export const addFamilyDataJoi = (req,res,next)=>{
   const joiSchema = Joi.object({
     FathersName: Joi.string().required(),
     FathersAge: Joi.number().required(),
@@ -118,10 +119,10 @@ const addFamilyDataJoi = (req,res,next)=>{
   }
 }
 
-module.exports = {
-  addRegistrationDataJoi,
-  loginJoi,
-  addAdminJoi,
-  editFamilyDataJoi,
-  addFamilyDataJoi
-};
+// module.exports = {
+//   addRegistrationDataJoi,
+//   loginJoi,
+//   addAdminJoi,
+//   editFamilyDataJoi,
+//   addFamilyDataJoi
+// };
