@@ -12,6 +12,7 @@ import {router as documentRoutes} from "./Routes/documentRoutes.js";
 const app = express();
 app.use(express.json());
 
+
 const port = process.env.PORT || 3000;
 
 // app.use(express.json());
@@ -20,6 +21,8 @@ app.use("/api/login", LoginRoute);
 app.use("/api/FamilyData", FamilyDataRoute);
 app.use("/patients", patientRoutes);
 app.use("/uploads", documentRoutes);
+
+
 
 app.listen(port, () => {
   console.log(`server running on port ${port}`);

@@ -1,3 +1,4 @@
+
 // const bcrypt = require("bcryptjs");
 // const {
 //   checkAlreadyPresent,
@@ -5,7 +6,7 @@
 //   deleteData,
 //   ListData,
 // } = require("../Models/models.js");
-// const { verifyToken } = require("../Utils/jwtutils.js");
+
 
 import {checkAlreadyPresent,
   insertIntoData,
@@ -18,6 +19,7 @@ import bcrypt from "bcryptjs";
 
 // @desc Add User registration data
 // @route POST /api/PatientData
+
 // @access public
 export const addRegistrationData = (req, res) => {
   try {
@@ -167,11 +169,13 @@ export const listRegistration = (req, res) => {
       message: err.message,
     });
   }
+
 };
 
 // @desc Delete registered data
 // @route Delete /api/PatientData/:id
 // @access private
+
 export const addAdminRegistration = (req, res) => {
   try {
     // const { Email, passwords } = req.body;
@@ -234,3 +238,4 @@ export const addAdminRegistration = (req, res) => {
 //   listRegistration,
 //   addAdminRegistration,
 // };
+

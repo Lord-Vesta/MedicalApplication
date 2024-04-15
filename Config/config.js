@@ -12,4 +12,3 @@ export const db = sql.createPool({
   connectionLimit: 10,
 });
 
-

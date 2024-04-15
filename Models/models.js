@@ -227,6 +227,76 @@ export const editfamilydata = (
     }
   );
 };
+export const getPatientPersonalData = (callback) => {
+  db.query("select * from personalInfo", async (err, result) => {
+    if (err) {
+      callback({ error: "Database error" });
+    } else {
+      callback(result);
+    }
+  });
+};
+
+export const listSpecificPatientData = (Id, callback) => {
+  db.query(
+    `select * from personalInfo where Id = ?`,
+    [Id],
+    async (err, result) => {
+      if (err) {
+        callback({ error: "Database error" });
+      } else {
+        return callback(result);
+      }
+    }
+  );
+};
+
+export const createPatientDb = (ID, body, callback) => {
+  const {
+      firstName,
+      lastName,
+      mobileNumber,
+      dateOfBirth,
+      age,
+      weight,
+      height,
+      Bmi,
+      countryOfOrigin,
+      isDiabetic,
+      hasCardiacIssues,
+      hasBloodPressureConcerns,
+      diseaseType,
+      diseaseDescription
+  } = body;
+
+  db.query(
+      "INSERT INTO personalInfo (Id, firstName, lastName, mobileNumber, dateOfBirth, age, weight, height, Bmi, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [
+          ID,
+          firstName,
+          lastName,
+          mobileNumber,
+          dateOfBirth,
+          age,
+          weight,
+          height,
+          Bmi,
+          countryOfOrigin,
+          isDiabetic,
+          hasCardiacIssues,
+          hasBloodPressureConcerns,
+          diseaseType,
+          diseaseDescription
+      ],
+      async (err, result) => {
+          if (err) {
+              callback({ error: "Database error" });
+          } else {
+              return callback(result);
+          }
+      }
+  );
+};
 
 export const AddAnotherFamilyData = (stmts, values,callback) => {
   console.log("inside db stmts",stmts);
@@ -243,8 +313,42 @@ export const AddAnotherFamilyData = (stmts, values,callback) => {
   })
 }
 
+export const updatePatientPersonalDataDb = (
+  updateKey,
+  updateValues,
+  callback
+  // pass req.body if large nos of parameters
+) => {
+  console.log(updateKey, updateValues);
+  db.query(
+    `UPDATE personalInfo SET ${updateKey.join(", ")} WHERE Id = ?`,
+    updateValues,
+    async (err, result) => {
+      if (err) {
+        callback({ error: "Database error" });
+      } else {
+        return callback(result);
+      }
+    }
+  );
+};
+
+export const ListSpecificUploadedDoc = (Id, callback) => {
+  db.query(
+    `select * from UploadedDocuments where Id = ?`,
+    [Id],
+    async (err, result) => {
+      if (err) {
+        callback({ error: "Database error" });
+      } else {
+        return callback(result);
+      }
+    }
+  );
+};
+
 export const uploadDocument = (
-  userId,
+  Id,
   aadharCardFront,
   aadharCardBack,
   medicalInsuranceCardFront,
@@ -253,11 +357,11 @@ export const uploadDocument = (
 ) => {
   db.query(
     `
-    INSERT INTO UploadedDocuments (userId, aadharCardFront, aadharCardBack, medicalInsuranceCardFront, medicalInsuranceCardBack)
+    INSERT INTO UploadedDocuments (Id, aadharCardFront, aadharCardBack, medicalInsuranceCardFront, medicalInsuranceCardBack)
     VALUES (?, ?, ?, ?, ?)
     `,
     [
-      userId,
+      Id,
       aadharCardFront,
       aadharCardBack,
       medicalInsuranceCardFront,
@@ -281,7 +385,7 @@ export const updateDocumentsModel = (
   updateValues,
   callback
 ) => {
-  db.query(`update UploadedDocuments set ${updateKey.join(", ")} where userId=?`, updateValues,
+  db.query(`update UploadedDocuments set ${updateKey.join(", ")} where Id=?`, updateValues,
   (err, result) => {
     if (err) {
       callback({ error: "Database error: " + err.message });

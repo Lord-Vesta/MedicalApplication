@@ -1,3 +1,4 @@
+
 // const express = require('express');
 // const { addRegistrationData, deleteRegistrationData,listRegistration,addAdminRegistration } = require('../Controller/RegisterDataController');
 // const { authenticateToken } = require("../Middleware/authMiddleware.js");
@@ -19,3 +20,4 @@ router.delete('/',authenticateToken ,deleteRegistrationData)
 
 
 // module.exports = router;
+

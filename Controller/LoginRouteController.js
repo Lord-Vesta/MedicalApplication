@@ -1,4 +1,3 @@
-
 // const bcrypt = require("bcryptjs");
 // const { login } = require("../Models/models");
 // const { generateJwt } = require("../Utils/jwtutils");
@@ -7,9 +6,11 @@ import bcrypt from "bcryptjs"
 import {login} from "../Models/models.js"
 import {generateJwt} from "../Utils/jwtutils.js"
 
+
 // @desc check login data
 // @route POST /api/login
 // @access public
+
 export const loginUser = (req, res) => {
   console.log(req.body);
   try {
@@ -56,3 +57,4 @@ export const loginUser = (req, res) => {
 // module.exports = {
 //   loginUser,
 // };
+
