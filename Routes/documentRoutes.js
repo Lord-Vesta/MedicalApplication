@@ -1,3 +1,4 @@
+
 // const express = require('express');
 // const router = express.Router();
 // const multer = require('multer');
@@ -47,4 +48,12 @@ router.post('/uploadDocuments', authenticateToken, upload.fields([
   { name: 'medicalInsuranceCardBack', maxCount: 1 } 
 ]), uploadDocuments);
 
-// module.exports = router;
+router.put('/updateDocuments/:id', authenticateToken, upload.fields([
+    { name: 'aadharCardFront', maxCount: 1 }, 
+    { name: 'aadharCardBack', maxCount: 1 },
+    { name: 'medicalInsuranceCardFront', maxCount: 1 },
+    { name: 'medicalInsuranceCardBack', maxCount: 1 } 
+  ]),updateDocuments);
+
+
+

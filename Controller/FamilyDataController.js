@@ -174,7 +174,8 @@ export const EditFamilyData = (req, res) => {
           status: 403,
           error: "Invalid User Role",
           message: "You are not authorized to perform this action.",
-        });
+        }
+        );
       }
     }
   } catch (err) {

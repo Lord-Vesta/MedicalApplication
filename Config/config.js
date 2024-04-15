@@ -11,3 +11,5 @@ export const db = sql.createPool({
   database: process.env.DB_NAME,
   connectionLimit: 10,
 });
+
+
