@@ -272,8 +272,7 @@ const uploadDocuments = (req, res) => {
 
 
 
-
-const updateDocuments = (req, res) => {
+export const updateDocuments = (req, res) => {
   try {
     const Id = parseInt(req.params.id);
     let allColumns = [

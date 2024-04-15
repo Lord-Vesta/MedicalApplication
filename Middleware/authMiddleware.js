@@ -1,6 +1,7 @@
-const { verifyToken } = require("../Utils/jwtutils");
+// const { verifyToken } = require("../Utils/jwtutils");
+import {verifyToken} from "../Utils/jwtutils.js";
 
-function authenticateToken(req, res, next) {
+export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader;
   if (!token) {
@@ -24,6 +25,6 @@ function authenticateToken(req, res, next) {
   next();
 }
 
-module.exports = {
-  authenticateToken,
-};
+// module.exports = {
+//   authenticateToken,
+// };

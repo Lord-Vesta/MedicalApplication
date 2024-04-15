@@ -1,16 +1,19 @@
-const {
-  listFamilyData,
-  listSpecificData,
-  addFamilyData,
-  editfamilydata,
-} = require("../Models/models.js");
+// const {
+//   listFamilyData,
+//   listSpecificData,
+//   addFamilyData,
+//   editfamilydata,
+// } = require("../Models/models.js");
 
-const { verifyToken } = require("../Utils/jwtutils.js");
+import {listFamilyData,listSpecificData,addFamilyData,editfamilydata} from "../Models/models.js";
+import {verifyToken} from "../Utils/jwtutils.js";
+
+// const { verifyToken } = require("../Utils/jwtutils.js");
 
 // @desc Gets all family data
 // @route GET /api/FamilyData
 // @access private
-const getFamilyData = (req, res) => {
+export const getFamilyData = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
     let decodedToken = verifyToken(authHeader);
@@ -25,7 +28,7 @@ const getFamilyData = (req, res) => {
         } else if (result.length <= 0) {
           console.log("result.length");
           res.status(200).json({
-            status: 204,
+            status: 200,
             data: result,
           });
         }
@@ -58,7 +61,7 @@ const getFamilyData = (req, res) => {
 // @desc Add family data
 // @route POST /api/FamilyData
 // @access private
-const AddFamilyData = (req, res) => {
+export const AddFamilyData = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
     let decodedToken = verifyToken(authHeader);
@@ -96,7 +99,7 @@ const AddFamilyData = (req, res) => {
 // @desc Edit family data
 // @route PUT /api/FamilyData
 // @access private
-const EditFamilyData = (req, res) => {
+export const EditFamilyData = (req, res) => {
   try {
     const Id = parseInt(req.params.id);
     // console.log(req.body);
@@ -117,10 +120,9 @@ const EditFamilyData = (req, res) => {
     let values = [];
     const authHeader = req.headers["authorization"];
     let decodedToken = verifyToken(authHeader);
-    console.log(decodedToken);
+    // console.log(decodedToken);
     if (decodedToken.data.roles === "admin") {
-      console.log(stmts);
-      console.log(values);
+      console.log(req.body); 
       for (let c of allowedColumns) {
         if (c in req.body) {
           stmts.push(`${c} = ?`), values.push(req.body[c]);
@@ -145,13 +147,25 @@ const EditFamilyData = (req, res) => {
       });
     } else {
       if (decodedToken.data.ID == req.params.id) {
-        const Id = parseInt(req.params.id);
-        editfamilydata(Id, req.body, async function (result) {
+        for (let c of allowedColumns) {
+          if (c in req.body) {
+            stmts.push(`${c} = ?`), values.push(req.body[c]);
+          }
+        }
+        if (stmts.length == 0) {
+          return res.sendStatus(204); //nothing to do
+        }
+  
+        values.push(Id);
+        editfamilydata(stmts, values, async function (result) {
           if (result) {
             res.status(200).json({
               status: "Successfully Editted",
-              message: "data is successfully editted",
               data: result,
+            });
+          } else {
+            res.status(400).json({
+              status: "No data found",
             });
           }
         });
@@ -171,4 +185,4 @@ const EditFamilyData = (req, res) => {
   }
 };
 
-module.exports = { getFamilyData, AddFamilyData, EditFamilyData };
+// module.exports = { getFamilyData, AddFamilyData, EditFamilyData };

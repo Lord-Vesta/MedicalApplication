@@ -1,16 +1,25 @@
-const bcrypt = require("bcryptjs");
-const {
-  checkAlreadyPresent,
+// const bcrypt = require("bcryptjs");
+// const {
+//   checkAlreadyPresent,
+//   insertIntoData,
+//   deleteData,
+//   ListData,
+// } = require("../Models/models.js");
+// const { verifyToken } = require("../Utils/jwtutils.js");
+
+import {checkAlreadyPresent,
   insertIntoData,
   deleteData,
-  ListData,
-} = require("../Models/models.js");
-const { verifyToken } = require("../Utils/jwtutils.js");
+  ListData} from "../Models/models.js";
+import {verifyToken} from "../Utils/jwtutils.js";
+import bcrypt from "bcryptjs"; 
+
+
 
 // @desc Add User registration data
 // @route POST /api/PatientData
 // @access public
-const addRegistrationData = (req, res) => {
+export const addRegistrationData = (req, res) => {
   try {
     // const { Email, Passwords } = req.body;
     const roles = "user";
@@ -57,7 +66,7 @@ const addRegistrationData = (req, res) => {
 // @desc Delete registered data
 // @route Delete /api/PatientData/:id
 // @access private
-const deleteRegistrationData = (req, res) => {
+export const deleteRegistrationData = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
     verifyToken(authHeader);
@@ -84,9 +93,14 @@ const deleteRegistrationData = (req, res) => {
     } else if (decodedToken.data.roles === "user") {
       if (decodedToken.data.ID == req.params.id) {
         const Id = parseInt(req.params.id);
-        deleteData(Id, function (err, result) {
-          if (err) {
-            throw err;
+        deleteData(Id, async function (result) {
+          if (result.affectedRows === 0) {
+            res.status(404).json({
+              status: 404,
+              error: "Resource not found",
+              message:
+                "The requested resource with the provided ID was not found.",
+            });
           } else {
             res.status(201).json({
               status: 201,
@@ -94,12 +108,6 @@ const deleteRegistrationData = (req, res) => {
               data: result,
             });
           }
-        });
-      } else {
-        res.status(403).json({
-          status: 403,
-          error: "Invalid User Role",
-          message: "You are not authorized to perform this action.",
         });
       }
     }
@@ -115,7 +123,7 @@ const deleteRegistrationData = (req, res) => {
 // @desc Delete registered data
 // @route Delete /api/PatientData/:id
 // @access private
-const listRegistration = (req, res) => {
+export const listRegistration = (req, res) => {
   try {
     const authHeader = req.headers["authorization"];
     let decodedToken = verifyToken(authHeader);
@@ -124,15 +132,15 @@ const listRegistration = (req, res) => {
       ListData(async function (result) {
         if (result.length > 0) {
           res.status(200).json({
-            status: 204,
+            status: 200,
             data:result,
-            message: "no content is avaliable",
+            message: "user has been successfully fetched",
           });
           console.log(result.length);
         } else if (result.length <= 0) {
           res.status(201).json({
             status: 201,
-            message: "user has been successfully fetched",
+            message: "no content is avaliable",
             data: result,
           });
         }
@@ -156,7 +164,7 @@ const listRegistration = (req, res) => {
 // @desc Delete registered data
 // @route Delete /api/PatientData/:id
 // @access private
-const addAdminRegistration = (req, res) => {
+export const addAdminRegistration = (req, res) => {
   try {
     // const { Email, passwords } = req.body;
     const {
@@ -212,9 +220,9 @@ const addAdminRegistration = (req, res) => {
   }
 };
 
-module.exports = {
-  addRegistrationData,
-  deleteRegistrationData,
-  listRegistration,
-  addAdminRegistration,
-};
+// module.exports = {
+//   addRegistrationData,
+//   deleteRegistrationData,
+//   listRegistration,
+//   addAdminRegistration,
+// };

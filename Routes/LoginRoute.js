@@ -1,7 +1,15 @@
-const express = require('express');
-const { loginUser } = require('../Controller/LoginRouteController');
-const router = express.Router();
+// const express = require('express');
+// const { loginUser } = require('../Controller/LoginRouteController');
+// const { loginJoi } = require('../Middleware/joiMiddleware');
 
-router.post('/',loginUser)
+import express from "express";
+import {loginUser} from "../Controller/LoginRouteController.js"
+import {loginJoi} from "../Middleware/joiMiddleware.js"
 
-module.exports = router;
+export const router = express.Router();
+
+
+
+router.post('/',loginJoi,loginUser)
+
+// module.exports = router;

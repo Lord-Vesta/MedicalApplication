@@ -10,4 +10,4 @@ router.get('/',authenticateToken, getPatientData);
 router.post('/',authenticateToken, CreatePatient);
 router.put('/:id',authenticateToken, UpdatePatientPersonalData);
 
-module.exports = router;
+// module.exports = router;
