@@ -10,5 +10,5 @@ export const db = sql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     connectionLimit: 10,
-  } );
+  });
 
