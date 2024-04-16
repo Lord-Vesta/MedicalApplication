@@ -53,7 +53,7 @@ router.put('/updateDocuments/:id', authenticateToken, upload.fields([
     { name: 'aadharCardBack', maxCount: 1 },
     { name: 'medicalInsuranceCardFront', maxCount: 1 },
     { name: 'medicalInsuranceCardBack', maxCount: 1 } 
-  ]),updateDocuments);
+  ]), updateDocuments);
 
 
 
