@@ -1,8 +1,8 @@
 // routes/patientRoutes.js
-const express = require('express');
-const router = express.Router();
-const { getPatientData, UpdatePatientPersonalData, CreatePatient } = require('../Controller/patientControllers');
-const { authenticateToken } = require("../Middleware/authMiddleware.js");
+import express  from 'express';
+export const router = express.Router();
+import  { getPatientData, UpdatePatientPersonalData, CreatePatient } from '../Controller/patientControllers.js';
+import  { authenticateToken } from "../Middleware/authMiddleware.js";
 
 
 
