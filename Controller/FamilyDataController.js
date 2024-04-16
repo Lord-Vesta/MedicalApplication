@@ -5,8 +5,15 @@
 //   editfamilydata,
 // } = require("../Models/models.js");
 
-import {listFamilyData,listSpecificData,addFamilyData,editfamilydata} from "../Models/models.js";
-import {verifyToken} from "../Utils/jwtutils.js";
+import {
+  listFamilyData,
+  listSpecificData,
+  addFamilyData,
+  editfamilydata,
+  listFamilyDataWithoutFlag,
+  AddAnotherFamilyData,
+} from "../Models/models.js";
+import { verifyToken } from "../Utils/jwtutils.js";
 
 // const { verifyToken } = require("../Utils/jwtutils.js");
 
@@ -71,6 +78,7 @@ export const AddFamilyData = (req, res) => {
     let decodedToken = verifyToken(authHeader);
     // if (decodedToken.data.roles === "user") {
     const Id = decodedToken.data.ID;
+    const flag = true;
 
     listSpecificData(Id, async function (result) {
       if (result.length > 0) {
@@ -80,13 +88,60 @@ export const AddFamilyData = (req, res) => {
           message: "Family Data for this Id is already present",
         });
       } else {
-        addFamilyData(decodedToken.data.ID, req.body, async function (result) {
-          if (result) {
-            res.status(200).json({
-              status: 200,
-              message: "data is successfully added to familyData",
-              data: result,
+        console.log("inside else");
+        listFamilyDataWithoutFlag(Id, async function (result) {
+          if (result.length > 0) {
+            console.log("result.length",result.length);
+            let allowedColumns = [
+              "FathersName",
+              "FathersAge",
+              "FathersCountry",
+              "MothersName",
+              "mothersAge",
+              "motherCountry",
+              "diabetic",
+              "preDiabetic",
+              "CardiacPast",
+              "cardiacPresent",
+              "bloodPressure",
+            ];
+            let stmts = [];
+            let values = [];
+            for (let c of allowedColumns) {
+              if (c in req.body) {
+                stmts.push(`${c} = ?`), values.push(req.body[c]);
+              }
+            }
+            
+            stmts.push(`flag = ?`);
+            values.push(flag);
+            console.log(stmts);
+            console.log(values);
+            AddAnotherFamilyData(stmts, values, async function (result) {
+              if (result) {
+                res.status(200).json({
+                    status: 200,
+                    message: "data is successfully added to familyData",
+                    data: result,
+                });
+              } else {
+                res.status(400).json({
+                  status: "No data found",
+                });
+              }
             });
+          } else {
+            addFamilyData(
+              decodedToken.data.ID,
+              req.body,
+              flag,
+              async function (result) {
+                if (result) {
+                  res.status(200).json({
+                  });
+                }
+              }
+            );
           }
         });
       }
@@ -127,7 +182,7 @@ export const EditFamilyData = (req, res) => {
     let decodedToken = verifyToken(authHeader);
     // console.log(decodedToken);
     if (decodedToken.data.roles === "admin") {
-      console.log(req.body); 
+      console.log(req.body);
       for (let c of allowedColumns) {
         if (c in req.body) {
           stmts.push(`${c} = ?`), values.push(req.body[c]);
@@ -160,7 +215,7 @@ export const EditFamilyData = (req, res) => {
         if (stmts.length == 0) {
           return res.sendStatus(204); //nothing to do
         }
-  
+
         values.push(Id);
         editfamilydata(stmts, values, async function (result) {
           if (result) {
@@ -179,8 +234,7 @@ export const EditFamilyData = (req, res) => {
           status: 403,
           error: "Invalid User Role",
           message: "You are not authorized to perform this action.",
-        }
-        );
+        });
       }
     }
   } catch (err) {

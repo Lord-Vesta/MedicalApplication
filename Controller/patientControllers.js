@@ -1,6 +1,5 @@
 
 import{getPatientPersonalData,listSpecificPatientData,createPatientDb,updatePatientPersonalDataDb} from "../Models/models.js"
-
 import { verifyToken } from "../Utils/jwtutils.js";
 
 export const getPatientData = (req, res) => {
@@ -48,11 +47,11 @@ export const getPatientData = (req, res) => {
 
     
 export const CreatePatient = (req, res) => {
+    console.log("hello");
     try {
         const authHeader = req.headers["authorization"];
         let decodedToken = verifyToken(authHeader);
         const Id = decodedToken.data.ID;
-
         listSpecificPatientData(Id,async function (result){
             if(result.length>0){
                 res.status(409).json({

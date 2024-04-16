@@ -1,8 +1,9 @@
 import {db} from "../Config/config.js"
+import asyncHandler from 'express-async-handler'
 
 export const checkAlreadyPresent = (Email, callback) => {
   db.query(
-    "Select Id from CredentialData where Email = ?",
+    "Select Id from CredentialData where Email = ? and flag = true",
     [Email],
     async (err, result) => {
       if (err) {
@@ -28,7 +29,7 @@ export const insertIntoData = (Email, Password, roles, flag, callback) => {
   );
 };
 
-export const deleteData = (Id, callback) => {
+export const deleteData = asyncHandler(async(Id, callback) => {
   db.query(
     `update CredentialData set flag = false WHERE Id = ?;`,
     [Id],
@@ -40,21 +41,27 @@ export const deleteData = (Id, callback) => {
       }
     }
   );
-};
+
+});
 
 
 export const login = (Email, callback) => {
+  console.log("inside login");
+  console.log(Email);
   db.query(
-    "select * from CredentialData where Email =?",
+    "select * from CredentialData where Email =? and flag = true;",
     [Email],
     async (err, result) => {
       if (err) {
+        // console.log(err);
         callback({ error: "Database error" });
       } else {
+        // console.log(result);
         return callback(result);
       }
     }
   );
+  console.log("at the end of login");
 };
 
 export const ListData = (callback) => {
@@ -71,7 +78,7 @@ export const ListData = (callback) => {
 };
 
 export const listFamilyData = (callback) => {
-  db.query("select * from FamilyData", async (err, result) => {
+  db.query("select * from FamilyData where flag = true", async (err, result) => {
     if (err) {
       callback({ error: "Database error" });
     } else {
@@ -79,6 +86,16 @@ export const listFamilyData = (callback) => {
     }
   });
 };
+
+export const listSpecificRegistrationData = (Id,callback)=>{
+  db.query("select Id,Email,roles from CredentialData where Id = ? and flag = true",[Id], async (err, result) => {
+    if (err) {
+      callback({ error: "Database error" });
+    } else {
+      return callback(result);
+    }
+  });
+}
 
 export const checkId = (Id, callback) => {
   db.query(
@@ -95,20 +112,42 @@ export const checkId = (Id, callback) => {
 };
 
 export const listSpecificData = (Id, callback) => {
+  console.log("inside specific");
+  console.log(typeof Id);
+  console.log(Id);
   db.query(
-    `select * from FamilyData where Id = ?`,
+    "select * from FamilyData where Id = ? and flag = true",
     [Id],
     async (err, result) => {
       if (err) {
+        console.log(err);
+        console.error("Database error:", err); 
         callback({ error: "Database error" });
       } else {
+        console.log("inside result");
+        console.log(result);
         return callback(result);
       }
     }
   );
 };
 
-export const addFamilyData = (ID, body, callback) => {
+export const listFamilyDataWithoutFlag = (Id,callback)=>{
+  console.log("inside flag");
+  console.log(Id);
+  db.query(`select * from FamilyData where Id = ?`,[Id],async(err, result) => {
+    if(err){
+      console.log(err);
+      callback({error: "Database error"})
+    }
+    else{
+      console.log(result);
+      return callback(result)
+    }
+  })
+}
+
+export const addFamilyData = (ID, body,flag, callback) => {
   const {
     FathersName,
     FathersAge,
@@ -123,7 +162,7 @@ export const addFamilyData = (ID, body, callback) => {
     bloodPressure,
   } = body;
   db.query(
-    "insert into FamilyData (Id,FathersName,FathersAge,FathersCountry,MothersName,mothersAge,motherCountry,diabetic,preDiabetic,CardiacPast,cardiacPresent,bloodPressure) values (?,?,?,?,?,?,?,?,?,?,?,?)",
+    "insert into FamilyData (Id,FathersName,FathersAge,FathersCountry,MothersName,mothersAge,motherCountry,diabetic,preDiabetic,CardiacPast,cardiacPresent,bloodPressure,flag) values (?,?,?,?,?,?,?,?,?,?,?,?,?)",
     [
       ID,
       FathersName,
@@ -137,6 +176,7 @@ export const addFamilyData = (ID, body, callback) => {
       CardiacPast,
       cardiacPresent,
       bloodPressure,
+      flag
     ],
     async (err, result) => {
       if (err) {
@@ -156,7 +196,7 @@ export const editfamilydata = (
 ) => {
   // console.log(stmts, values); 
   db.query(
-    `UPDATE FamilyData SET ${stmts.join(", ")} WHERE Id = ?`,
+    `UPDATE FamilyData SET ${stmts.join(", ")} WHERE Id = ? and flag = true;`,
     values,
     async (err, result) => {
       if (err) {
@@ -238,6 +278,21 @@ export const createPatientDb = (ID, body, callback) => {
   );
 };
 
+export const AddAnotherFamilyData = (stmts, values,callback) => {
+  console.log("inside db stmts",stmts);
+  console.log("inside db values",values);
+  db.query(`UPDATE familyData SET ${stmts.join(", ")}`,values,async(err,result)=>{
+    if(err){
+      console.log(err);
+      callback({error: "Database error"})
+    }
+    else{
+      console.log(result);
+      return callback(result)
+    }
+  })
+}
+
 export const updatePatientPersonalDataDb = (
   updateKey,
   updateValues,
@@ -271,6 +326,7 @@ export const ListSpecificUploadedDoc = (Id, callback) => {
     }
   );
 };
+
 export const uploadDocument = (
   Id,
   aadharCardFront,

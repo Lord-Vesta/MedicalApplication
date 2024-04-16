@@ -11,7 +11,7 @@
 import {checkAlreadyPresent,
   insertIntoData,
   deleteData,
-  ListData} from "../Models/models.js";
+  ListData,listSpecificRegistrationData} from "../Models/models.js";
 import {verifyToken} from "../Utils/jwtutils.js";
 import bcrypt from "bcryptjs"; 
 
@@ -73,9 +73,8 @@ export const deleteRegistrationData = (req, res) => {
     const authHeader = req.headers["authorization"];
     verifyToken(authHeader);
     let decodedToken = verifyToken(authHeader);
-    const Id = parseInt(req.params.id);
-
     if (decodedToken.data.roles === "admin") {
+      const Id = req.params.Id;
       deleteData(Id, async function (result) {
         if (result.affectedRows === 0) {
           res.status(404).json({
@@ -92,26 +91,12 @@ export const deleteRegistrationData = (req, res) => {
           });
         }
       });
-    } else if (decodedToken.data.roles === "user") {
-      if (decodedToken.data.ID == req.params.id) {
-        const Id = parseInt(req.params.id);
-        deleteData(Id, async function (result) {
-          if (result.affectedRows === 0) {
-            res.status(404).json({
-              status: 404,
-              error: "Resource not found",
-              message:
-                "The requested resource with the provided ID was not found.",
-            });
-          } else {
-            res.status(201).json({
-              status: 201,
-              message: "user has been successfully deleted",
-              data: result,
-            });
-          }
-        });
-      }
+    } else {
+      res.status(403).json({
+        status: 403,
+        error: "Invalid User Role",
+        message: "You are not authorized to perform this action.",
+      });
     }
   } catch (err) {
     res.status(500).json({
@@ -147,12 +132,23 @@ export const listRegistration = (req, res) => {
           });
         }
       });
-    } else {
-      res.status(403).json({
-        status: 403,
-        error: "Invalid User Role",
-        message: "You are not authorized to perform this action.",
-      });
+    } else if (decodedToken.data.roles === "user"){
+      const Id = parseInt(decodedToken.data.ID);
+      listSpecificRegistrationData(Id,async function(result){
+        if (result.length > 0) {
+          res.status(201).json({
+            status: 201,
+            message: "data is fetched successfully",
+            data: result,
+          });
+        } else if (result.length <= 0) {
+          res.status(204).json({
+            status: 204,
+            message: "no content is avaliable",
+            data: result,
+          });
+        }
+      })
     }
   } catch (error) {
     res.status(500).json({
@@ -223,6 +219,47 @@ export const addAdminRegistration = (req, res) => {
     });
   }
 };
+
+export const deleteUserRegistrationData = (req,res)=>{
+  try{
+    const authHeader = req.headers["authorization"];
+    verifyToken(authHeader);
+    let decodedToken = verifyToken(authHeader);
+    const Id = parseInt(decodedToken.data.ID);
+    if (decodedToken.data.roles === "user") {
+      deleteData(Id, async function (result) {
+          if (result.affectedRows === 0) {
+            res.status(404).json({
+              status: 404,
+              error: "Resource not found",
+              message:
+                "The requested resource with the provided ID was not found.",
+            });
+          } else {
+            res.status(201).json({
+              status: 201,
+              message: "user has been successfully deleted",
+              data: result,
+            });
+          }
+        });
+      }
+      else{
+        res.status(403).json({
+          status: 403,
+          error: "Invalid User Role",
+          message: "You are not authorized to perform this action.",
+        });
+      }
+  }
+  catch(err){
+    res.status(500).json({
+      status: 500,
+      error: "Server error",
+      message: err.message,
+    });
+  }
+}
 
 // module.exports = {
 //   addRegistrationData,
