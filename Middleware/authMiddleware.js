@@ -2,6 +2,7 @@
 import {verifyToken} from "../Utils/jwtutils.js";
 
 export const authenticateToken = (req, res, next) => {
+  console.log("inside authentication");
   const authHeader = req.headers["authorization"];
   const token = authHeader;
   if (!token) {
@@ -22,6 +23,7 @@ export const authenticateToken = (req, res, next) => {
   }
 
   req.user = result.data;
+  console.log("authentication completed");
   next();
 }
 
