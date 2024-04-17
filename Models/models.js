@@ -349,10 +349,12 @@ export const uploadDocument = (
     ],
     async (err, result) => {
       if (err) {
-        // console.error('Error uploading documents:', err);
+        console.error('Error uploading documents:', err);
+        console.log(err);
         callback({ error: "Database error: " + err.message });
       } else {
-        return callback(result);
+        console.log("result in db",result);
+        callback(result);
       }
     }
   );

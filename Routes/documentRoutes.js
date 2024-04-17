@@ -1,11 +1,3 @@
-
-// // const express = require('express');
-// // const router = express.Router();
-// // const multer = require('multer');
-// // const { uploadDocuments } = require('../Controller/documentControllers');
-// // const { authenticateToken } = require('');
-// // const uuid = require('uuid').v4;
-
 // import express from 'express';
 // import multer from 'multer';
 // import {uploadDocuments,updateDocuments} from "../Controller/documentControllers.js"
@@ -48,6 +40,14 @@
 //   { name: 'medicalInsuranceCardBack', maxCount: 1 } 
 // ]), uploadDocuments);
 
+
+// router.put('/updateDocuments/:id', authenticateToken, upload.fields([
+//     { name: 'aadharCardFront', maxCount: 1 }, 
+//     { name: 'aadharCardBack', maxCount: 1 },
+//     { name: 'medicalInsuranceCardFront', maxCount: 1 },
+//     { name: 'medicalInsuranceCardBack', maxCount: 1 } 
+//   ]),updateDocuments);
+
 // router.put('/updateDocuments/:id', authenticateToken, upload.fields([
 //     { name: 'aadharCardFront', maxCount: 1 }, 
 //     { name: 'aadharCardBack', maxCount: 1 },
@@ -57,9 +57,14 @@
 
 
 
-// routes.js
 
 import express from 'express';
+import multer from 'multer';
+import {uploadDocuments,updateDocuments} from "../Controller/documentControllers.js"
+import {authenticateToken} from "../Middleware/authMiddleware.js"
+import { v4 as uuid } from 'uuid';
+
+
 export const router = express.Router();
 import  { uploadDocuments, updateDocuments } from "../Controller/documentControllers.js";
 
