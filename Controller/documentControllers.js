@@ -39,104 +39,7 @@ import { verifyToken }  from "../Utils/jwtutils.js";
   { name: 'medicalInsuranceCardBack', maxCount: 1 }
 ]);
 
-// const uploadDocuments = (req, res) => {
-//   try {
-//     const authHeader = req.headers["authorization"];
-//     const decodedToken = verifyToken(authHeader);
-//     const Id = decodedToken.data.ID;
-//     ListSpecificUploadedDoc(Id, async function (result) {
-//       if (result.length > 0) {
-//         res.status(409).json({
-//           status: 409,
-//           error: "Documents already exist",
-//           message: "Documents for this ID already present"
-//         });
-//       } else {
-//         upload(req, res, async function (err) {
-//           if (err instanceof multer.MulterError) {
-//             if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-//               res.status(400).json({
-//                 status: 400,
-//                 error: "File upload error",
-//                 message: "Unexpected number of files uploaded"
-//               });
-//             } else if (err.code === 'LIMIT_FILE_SIZE') {
-//               res.status(400).json({
-//                 status: 400,
-//                 error: "File upload error",
-//                 message: "File size exceeds the limit"
-//               });
-//             } else if (err.code === 'LIMIT_FILE_COUNT') {
-//               res.status(400).json({
-//                 status: 400,
-//                 error: "File upload error",
-//                 message: "Maximum file count exceeded"
-//               });
-//             } else {
-//               res.status(500).json({
-//                 status: 500,
-//                 error: "Server error",
-//                 message: err.message
-//               });
-//             }
-//           } else if (err) {
-//             res.status(500).json({
-//               status: 500,
-//               error: "Server error",
-//               message: err.message
-//             });
-//           } else {
-//             const fileFields = Object.keys(req.files);
-//             if (fileFields.length !== 4) {
-//               res.status(400).json({
-//                 status: 400,
-//                 error: "File upload error",
-//                 message: "Exactly 4 files should be uploaded"
-//               });
-//             } else {
-            
-//               const filePaths = {
-//                 aadharCardFront: req.files['aadharCardFront'][0].path,
-//                 aadharCardBack: req.files['aadharCardBack'][0].path,
-//                 medicalInsuranceCardFront: req.files['medicalInsuranceCardFront'][0].path,
-//                 medicalInsuranceCardBack: req.files['medicalInsuranceCardBack'][0].path
-//               };
 
-            
-//               uploadDocument(Id,
-//                 filePaths.aadharCardFront,
-//                 filePaths.aadharCardBack,
-//                 filePaths.medicalInsuranceCardFront,
-//                 filePaths.medicalInsuranceCardBack,
-//                 function (err, result) {
-//                   if (err) {
-//                     res.status(500).json({
-//                       status: 500,
-//                       error: "Server error",
-//                       message: err.message
-//                     });
-//                   } else {
-//                     res.status(200).json({
-//                       status: 200,
-//                       message: "Documents uploaded successfully",
-//                       data: result 
-//                     });
-//                   }
-//                 }
-//               );
-//             }
-//           }
-//         });
-//       }
-//     });
-//   } catch (e) {
-//     res.status(500).json({
-//       status: 500,
-//       error: "Server error",
-//       message: e.message
-//     });
-//   }
-// }
 export const uploadDocuments = (req, res) => {
     try {
       const authHeader = req.headers["authorization"];
@@ -201,13 +104,7 @@ export const uploadDocuments = (req, res) => {
                 filePaths.medicalInsuranceCardFront, 
                 filePaths.medicalInsuranceCardBack, 
                 function (err, result) {
-              if (err) {
-                return res.status(500).json({
-                  status: 500,
-                  error: "Server error",
-                  message: err.message
-                });
-              } else {
+              if (result){
                 return res.status(200).json({
                   status: 200,
                   message: "Documents uploaded successfully",

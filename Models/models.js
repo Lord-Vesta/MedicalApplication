@@ -349,8 +349,8 @@ export const uploadDocument = (
     ],
     async (err, result) => {
       if (err) {
-        console.error('Error uploading documents:', err);
-        // callback({ error: "Database error: " + err.message });
+        // console.error('Error uploading documents:', err);
+        callback({ error: "Database error: " + err.message });
       } else {
         return callback(result);
       }

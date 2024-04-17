@@ -1,0 +1,274 @@
+{
+	"info": {
+		"_postman_id": "4bfa56b7-219b-42ed-8e3d-36b1025fbd5f",
+		"name": "PersonalData",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34014049"
+	},
+	"item": [
+		{
+			"name": "AddData",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MywiZW1haWwiOiJLZXNoYXZAZ21haWwuY29tIiwicGFzc3dvcmRzIjoiJDJhJDEwJFd0TzFxdXF3R2F6ZDFWUU9QQWxUbGVLRGRpLjBWVDVabGRWMDI4LmpGVVFtcUJUTjNwS1MuIiwiaWF0IjoxNzEyMzI2OTY5LCJleHAiOjE3MTIzMzQxNjl9.QoA0sawchmElNYhxTOKRZyBDgXzOmxEN3ok5o04C6gU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"firstName\": \"Keshav\",\r\n        \"lastName\": \"Oza\",\r\n        \"mobileNumber\": \"9158463354\",\r\n        \"dateOfBirth\": \"2000-10-16\",\r\n        \"weight\": \"58.00\",\r\n        \"height\": \"5-1\",\r\n        \"countryOfOrigin\": \"India\",\r\n        \"isDiabetic\": 0,\r\n        \"hasCardiacIssues\": 0,\r\n        \"hasBloodPressureConcerns\": 0,\r\n        \"diseaseType\": \"Fever\",\r\n        \"diseaseDescription\": \"Hot temperature\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"patients"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "AddData",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MywiZW1haWwiOiJLZXNoYXZAZ21haWwuY29tIiwicGFzc3dvcmRzIjoiJDJhJDEwJFd0TzFxdXF3R2F6ZDFWUU9QQWxUbGVLRGRpLjBWVDVabGRWMDI4LmpGVVFtcUJUTjNwS1MuIiwiaWF0IjoxNzEyMzI2OTY5LCJleHAiOjE3MTIzMzQxNjl9.QoA0sawchmElNYhxTOKRZyBDgXzOmxEN3ok5o04C6gU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"firstName\": \"Keshav\",\r\n        \"lastName\": \"Oza\",\r\n        \"mobileNumber\": \"9158463354\",\r\n        \"dateOfBirth\": \"2000-10-16\",\r\n        \"weight\": \"58.00\",\r\n        \"height\": \"5-1\",\r\n        \"countryOfOrigin\": \"India\",\r\n        \"isDiabetic\": 0,\r\n        \"hasCardiacIssues\": 0,\r\n        \"hasBloodPressureConcerns\": 0,\r\n        \"diseaseType\": \"Fever\",\r\n        \"diseaseDescription\": \"Hot temperature\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/patients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"patients"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "157"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"9d-eW29/NFzxGPt9NRbXlZBg8mhL6c\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 05 Apr 2024 14:23:28 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Patient created successfully\",\n    \"Data\": {\n        \"fieldCount\": 0,\n        \"affectedRows\": 1,\n        \"insertId\": 0,\n        \"info\": \"\",\n        \"serverStatus\": 2,\n        \"warningStatus\": 0,\n        \"changedRows\": 0\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "GetData",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/patients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"patients"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "655"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"28f-E132XDknDANKPY3QDlixbgYleII\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 05 Apr 2024 14:26:19 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"userId\": 2,\n        \"firstName\": \"Keshav\",\n        \"lastName\": \"Oza\",\n        \"mobileNumber\": \"9158463354\",\n        \"dateOfBirth\": \"2000-10-15T18:30:00.000Z\",\n        \"age\": 23,\n        \"weight\": \"58.00\",\n        \"height\": \"5-1\",\n        \"Bmi\": 24.1602,\n        \"countryOfOrigin\": \"India\",\n        \"isDiabetic\": 0,\n        \"hasCardiacIssues\": 0,\n        \"hasBloodPressureConcerns\": 0,\n        \"diseaseType\": \"Fever\",\n        \"diseaseDescription\": \"Hot temperature\"\n    },\n    {\n        \"userId\": 3,\n        \"firstName\": \"aakash\",\n        \"lastName\": \"Oza\",\n        \"mobileNumber\": \"9158463354\",\n        \"dateOfBirth\": \"2000-10-15T18:30:00.000Z\",\n        \"age\": 23,\n        \"weight\": \"58.00\",\n        \"height\": \"5-1\",\n        \"Bmi\": 24.1602,\n        \"countryOfOrigin\": \"India\",\n        \"isDiabetic\": 0,\n        \"hasCardiacIssues\": 0,\n        \"hasBloodPressureConcerns\": 0,\n        \"diseaseType\": \"Fever\",\n        \"diseaseDescription\": \"Hot temperature\"\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "EditData",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTEsImVtYWlsIjoiS2VzaGF2QGdtYWlsLmNvbSIsInBhc3N3b3JkcyI6IiQyYSQxMCRZVTFDVkx1UFUuS2JFQ3hyNEk5RU91L05vYjNGOHBXYlg4QzBuMjdqVXdRN3JoUkMxQnZBaSIsImlhdCI6MTcxMjUxOTIwOSwiZXhwIjoxNzEyNTI2NDA5fQ.QUFkl7I9OkX4zt4ZhvWx63tGYFk93PPn8cxnCrZ7G98",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"firstName\": \"YashUpdated\",\r\n        \"lastName\": \"Jadhav\",\r\n        \"mobileNumber\": \"9158463354\",\r\n        \"dateOfBirth\": \"2000-10-16\",\r\n        \"weight\": \"58.00\",\r\n        \"height\": \"5-1\",\r\n        \"countryOfOrigin\": \"India\",\r\n        \"isDiabetic\": 0,\r\n        \"hasCardiacIssues\": 0,\r\n        \"hasBloodPressureConcerns\": 0,\r\n        \"diseaseType\": \"Fever\",\r\n        \"diseaseDescription\": \"Hot temperature\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/patients/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"patients",
+						"12"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"firstName\": \"aakash\",\r\n        \"lastName\": \"Oza\",\r\n        \"mobileNumber\": \"9158463354\",\r\n        \"dateOfBirth\": \"2000-10-16\",\r\n        \"weight\": \"58.00\",\r\n        \"height\": \"5-1\",\r\n        \"countryOfOrigin\": \"India\",\r\n        \"isDiabetic\": 0,\r\n        \"hasCardiacIssues\": 0,\r\n        \"hasBloodPressureConcerns\": 0,\r\n        \"diseaseType\": \"Fever\",\r\n        \"diseaseDescription\": \"Hot temperature\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/patients/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"patients",
+								"3"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "47"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2f-Glsfu5Q2e024cS5ZmLxxBVkLqwk\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 05 Apr 2024 14:26:10 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Patient data updated successfully\"\n}"
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,89 @@
+{
+	"info": {
+		"_postman_id": "5b0787cb-9968-4a66-b779-8836a628eef6",
+		"name": "FamilyData",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34014049"
+	},
+	"item": [
+		{
+			"name": "GetFamilyData",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "AddFamilyData",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTIsImVtYWlsIjoiWWFzaEBnbWFpbC5jb20iLCJwYXNzd29yZHMiOiIkMmEkMTAkM0pxUGJCYUVQb2ljOGZkMVVTbW1QdTdKdkREOHVmcm9iYUQvbnJUSzBvQVJSYTBvS29IcC4iLCJpYXQiOjE3MTI1NTAxMzcsImV4cCI6MTcxMjU1NzMzN30.71bO4FpiQOLQsenVSoNcPL3IvmEUVPCGntCTcwbeveg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"FathersName\" : \"YashDad\",\r\n    \"FathersAge\" : 37,\r\n    \"FathersCountry\" : \"India\",\r\n    \"MothersName\" : \"Sapna\",\r\n    \"mothersAge\": 35,\r\n    \"motherCountry\" : \"India\",\r\n    \"diabetic\" : false,\r\n    \"preDiabetic\" : false,\r\n    \"CardiacPast\" : false,\r\n    \"cardiacPresent\" : false,\r\n    \"bloodPressure\" : false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/FamilyData",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"FamilyData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EditFamilyData",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTIsImVtYWlsIjoiWWFzaEBnbWFpbC5jb20iLCJwYXNzd29yZHMiOiIkMmEkMTAkM0pxUGJCYUVQb2ljOGZkMVVTbW1QdTdKdkREOHVmcm9iYUQvbnJUSzBvQVJSYTBvS29IcC4iLCJpYXQiOjE3MTI1NTAxMzcsImV4cCI6MTcxMjU1NzMzN30.71bO4FpiQOLQsenVSoNcPL3IvmEUVPCGntCTcwbeveg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"FathersName\" : \"YashDadUpdated\",\r\n    \"FathersAge\" : 37,\r\n    \"FathersCountry\" : \"India\",\r\n    \"MothersName\" : \"sita\",\r\n    \"mothersAge\": 35,\r\n    \"motherCountry\" : \"India\",\r\n    \"diabetic\" : true,\r\n    \"preDiabetic\" : true,\r\n    \"CardiacPast\" : false,\r\n    \"cardiacPresent\" : false,\r\n    \"bloodPressure\" : false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/FamilyData/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"FamilyData",
+						"12"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
