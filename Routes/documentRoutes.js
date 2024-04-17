@@ -40,12 +40,21 @@
 //   { name: 'medicalInsuranceCardBack', maxCount: 1 } 
 // ]), uploadDocuments);
 
+
 // router.put('/updateDocuments/:id', authenticateToken, upload.fields([
 //     { name: 'aadharCardFront', maxCount: 1 }, 
 //     { name: 'aadharCardBack', maxCount: 1 },
 //     { name: 'medicalInsuranceCardFront', maxCount: 1 },
 //     { name: 'medicalInsuranceCardBack', maxCount: 1 } 
 //   ]),updateDocuments);
+
+// router.put('/updateDocuments/:id', authenticateToken, upload.fields([
+//     { name: 'aadharCardFront', maxCount: 1 }, 
+//     { name: 'aadharCardBack', maxCount: 1 },
+//     { name: 'medicalInsuranceCardFront', maxCount: 1 },
+//     { name: 'medicalInsuranceCardBack', maxCount: 1 } 
+//   ]), updateDocuments);
+
 
 
 
