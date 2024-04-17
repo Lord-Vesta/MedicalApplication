@@ -17,6 +17,7 @@ import { verifyToken }  from "../Utils/jwtutils.js";
 
 
  const fileFilter = function (req, file, cb) {
+
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'application/pdf') {
     cb(null, true); 
   } else {
@@ -39,113 +40,16 @@ import { verifyToken }  from "../Utils/jwtutils.js";
   { name: 'medicalInsuranceCardBack', maxCount: 1 }
 ]);
 
-// const uploadDocuments = (req, res) => {
-//   try {
-//     const authHeader = req.headers["authorization"];
-//     const decodedToken = verifyToken(authHeader);
-//     const Id = decodedToken.data.ID;
-//     ListSpecificUploadedDoc(Id, async function (result) {
-//       if (result.length > 0) {
-//         res.status(409).json({
-//           status: 409,
-//           error: "Documents already exist",
-//           message: "Documents for this ID already present"
-//         });
-//       } else {
-//         upload(req, res, async function (err) {
-//           if (err instanceof multer.MulterError) {
-//             if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-//               res.status(400).json({
-//                 status: 400,
-//                 error: "File upload error",
-//                 message: "Unexpected number of files uploaded"
-//               });
-//             } else if (err.code === 'LIMIT_FILE_SIZE') {
-//               res.status(400).json({
-//                 status: 400,
-//                 error: "File upload error",
-//                 message: "File size exceeds the limit"
-//               });
-//             } else if (err.code === 'LIMIT_FILE_COUNT') {
-//               res.status(400).json({
-//                 status: 400,
-//                 error: "File upload error",
-//                 message: "Maximum file count exceeded"
-//               });
-//             } else {
-//               res.status(500).json({
-//                 status: 500,
-//                 error: "Server error",
-//                 message: err.message
-//               });
-//             }
-//           } else if (err) {
-//             res.status(500).json({
-//               status: 500,
-//               error: "Server error",
-//               message: err.message
-//             });
-//           } else {
-//             const fileFields = Object.keys(req.files);
-//             if (fileFields.length !== 4) {
-//               res.status(400).json({
-//                 status: 400,
-//                 error: "File upload error",
-//                 message: "Exactly 4 files should be uploaded"
-//               });
-//             } else {
-            
-//               const filePaths = {
-//                 aadharCardFront: req.files['aadharCardFront'][0].path,
-//                 aadharCardBack: req.files['aadharCardBack'][0].path,
-//                 medicalInsuranceCardFront: req.files['medicalInsuranceCardFront'][0].path,
-//                 medicalInsuranceCardBack: req.files['medicalInsuranceCardBack'][0].path
-//               };
-
-            
-//               uploadDocument(Id,
-//                 filePaths.aadharCardFront,
-//                 filePaths.aadharCardBack,
-//                 filePaths.medicalInsuranceCardFront,
-//                 filePaths.medicalInsuranceCardBack,
-//                 function (err, result) {
-//                   if (err) {
-//                     res.status(500).json({
-//                       status: 500,
-//                       error: "Server error",
-//                       message: err.message
-//                     });
-//                   } else {
-//                     res.status(200).json({
-//                       status: 200,
-//                       message: "Documents uploaded successfully",
-//                       data: result 
-//                     });
-//                   }
-//                 }
-//               );
-//             }
-//           }
-//         });
-//       }
-//     });
-//   } catch (e) {
-//     res.status(500).json({
-//       status: 500,
-//       error: "Server error",
-//       message: e.message
-//     });
-//   }
-// }
 export const uploadDocuments = (req, res) => {
     try {
+      console.log("inside upload docs");
       const authHeader = req.headers["authorization"];
       const decodedToken = verifyToken(authHeader);
       const Id = decodedToken.data.ID;
-
-    // const {user:{data : {ID}}} = req;
+      console.log(Id);
 
       ListSpecificUploadedDoc(Id, async function (result) {
+        console.log(result);
         if (result.length > 0) {
           return res.status(409).json({
             status: 409,
@@ -154,6 +58,7 @@ export const uploadDocuments = (req, res) => {
           });
         } else {
           upload(req, res, async function (err) {
+            console.log("inside upload fucntion");
             if (err) {
               let errorMessage = "Server error";
               if (err instanceof multer.MulterError) {
@@ -171,14 +76,14 @@ export const uploadDocuments = (req, res) => {
                     errorMessage = err.message;
                 }
               }
-  
               return res.status(500).json({
+                
                 status: 500,
-                error: "File upload error",
+                error: "File upload error1",
                 message: errorMessage
               });
             }
-  
+            console.log("outside error msg");
             const fileFields = Object.keys(req.files);
             if (fileFields.length !== 4) {
               return res.status(400).json({
@@ -200,20 +105,15 @@ export const uploadDocuments = (req, res) => {
                 filePaths.aadharCardBack, 
                 filePaths.medicalInsuranceCardFront, 
                 filePaths.medicalInsuranceCardBack, 
-                function (err, result) {
-              if (err) {
-                return res.status(500).json({
-                  status: 500,
-                  error: "Server error",
-                  message: err.message
-                });
-              } else {
-                return res.status(200).json({
+                function (result) {
+              if (result) {
+                console.log("result",result);
+                res.status(200).json({
                   status: 200,
                   message: "Documents uploaded successfully",
                   data: result
                 });
-              }
+              } 
             });
           });
         }
@@ -221,7 +121,7 @@ export const uploadDocuments = (req, res) => {
     } catch (e) {
       return res.status(500).json({
         status: 500,
-        error: "Server error",
+        error: "Server error3",
         message: e.message
       });
     }
@@ -232,7 +132,12 @@ export const uploadDocuments = (req, res) => {
 
 export const updateDocuments = (req, res) => {
   try {
+    console.log(req.files);
     const Id = parseInt(req.params.id);
+    console.log(Id);
+    
+
+
     let allColumns = [
       "aadharCardFront",
       "aadharCardBack",
@@ -245,10 +150,10 @@ export const updateDocuments = (req, res) => {
     let arr = [];
     const authHeader = req.headers["authorization"];
     let decodedToken = verifyToken(authHeader);
-
+    
     if (decodedToken.data.roles === "admin") {
 
-      // console.log(cols);
+      
         for(let c in Object.keys(req.files)){          
           updateKey.push(`${Object.keys(req.files)[c]} = ?`);
           updateValues.push(Object.values(req.files)[c][0].path);
@@ -299,24 +204,5 @@ export const updateDocuments = (req, res) => {
     });
   }
 };
-
-// module.exports = {uploadDocuments,updateDocuments};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
