@@ -1,0 +1,285 @@
+{
+	"info": {
+		"_postman_id": "81b41f33-41dc-4220-9091-2f72a51dee35",
+		"name": "RegistrationData",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34014049"
+	},
+	"item": [
+		{
+			"name": "AddData",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MiwiZW1haWwiOiJha2FAZ21haWwuY29tIiwicGFzc3dvcmRzIjoiJDJhJDEwJGhGMW5XQi44M1M2cGlUVnlRdGVISi5sZFllQjI0V2svSERERkl1TWhrQnJ6ZjZrR3F2b0ltIiwiaWF0IjoxNzEyMzI1NTg2LCJleHAiOjE3MTIzMzI3ODZ9.gHhV-DYwXqklkRTh9MMlsYNHnkK6ajz8Q95WQPo_81w",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\":\"Yash@gmail.com\",\r\n    \"Passwords\":\"12345\",\r\n    \"roles\":\"user\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/PatientData",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"PatientData"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MiwiZW1haWwiOiJha2FAZ21haWwuY29tIiwicGFzc3dvcmRzIjoiJDJhJDEwJGhGMW5XQi44M1M2cGlUVnlRdGVISi5sZFllQjI0V2svSERERkl1TWhrQnJ6ZjZrR3F2b0ltIiwiaWF0IjoxNzEyMzI1NTg2LCJleHAiOjE3MTIzMzI3ODZ9.gHhV-DYwXqklkRTh9MMlsYNHnkK6ajz8Q95WQPo_81w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Email\":\"Keshv@gmail.com\",\r\n    \"Passwords\":\"1234\",\r\n    \"roles\":\"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/PatientData",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"PatientData"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "118"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"76-KkdysBEw2Wf7NAswLOLlmkLdWvg\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 05 Apr 2024 14:21:56 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"result\": {\n        \"fieldCount\": 0,\n        \"affectedRows\": 1,\n        \"insertId\": 4,\n        \"info\": \"\",\n        \"serverStatus\": 2,\n        \"warningStatus\": 0,\n        \"changedRows\": 0\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "DeleteData",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/PatientData/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"PatientData",
+						"10"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/PatientData/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"PatientData",
+								"3"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "14"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"e-aEvBzi6ALNuO8HA1LJWqimIbOnM\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 05 Apr 2024 14:27:05 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "\"succerssfull\""
+				}
+			]
+		},
+		{
+			"name": "ListData",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/PatientData",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"PatientData"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "248"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"f8-Z4iqvbuXPeHAJbht/6L09vbzVKs\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 05 Apr 2024 14:27:10 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"Email\": \"aka@gmail.com\",\n        \"passwords\": \"$2a$10$hF1nWB.83S6piTVyQteHJ.ldYeB24Wk/HDDFIuMhkBrzf6kGqvoIm\",\n        \"roles\": null,\n        \"Id\": 2\n    },\n    {\n        \"Email\": \"Keshv@gmail.com\",\n        \"passwords\": \"$2a$10$wMGx39fn7/8uaDXmMbbPnu32d58X.jlx1Yi9nAmRlcFhIntZocaY6\",\n        \"roles\": \"admin\",\n        \"Id\": 4\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "AddminRegistration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\":\"admin@gmail.com\",\r\n    \"Password\":\"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/PatientData/admin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"PatientData",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

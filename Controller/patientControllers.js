@@ -46,42 +46,158 @@ export const getPatientData = (req, res) => {
 
 
     
+// export const CreatePatient = (req, res) => {
+//     console.log("hello");
+//     try {
+//         const authHeader = req.headers["authorization"];
+//         let decodedToken = verifyToken(authHeader);
+//         const Id = decodedToken.data.ID;
+//         listSpecificPatientData(Id,async function (result){
+//             if(result.length>0){
+//                 res.status(409).json({
+//                     status:409,
+//                     error:"Patient already exists",
+//                     message:"Patient with this Id already present"
+//                 });
+//             }else{
+//                 createPatientDb(decodedToken.data.ID,req.body, async function(result){
+//                     if(result){
+//                         res.status(200).json({
+//                             status:200,
+//                             message:"Data is successfully added to Personal Form of the Patient",
+//                             data:result,
+
+//                         });
+//                     }
+//                 });
+//             }
+//         });
+//     } catch(e){
+//         res.status(500).json({
+//             status: 500,
+//             error: "Server error",
+//             message: err.message,
+//         })
+//     }
+              
+// };
+// export const CreatePatient = (req, res) => {
+//     console.log("hello");
+//     try {
+//       const authHeader = req.headers["authorization"];
+//       let decodedToken = verifyToken(authHeader);
+//       const Id = decodedToken.data.ID;
+  
+  
+//       listSpecificPatientData(Id, async function (result) {
+//         if (result.length > 0) {
+//           res.status(409).json({
+//             status: 409,
+//             error: "Patient already exists",
+//             message: "Patient with this Id already present",
+//           });
+//           return; 
+//         }
+  
+//         const { height, weight, dateOfBirth } = req.body;
+//         console.log(req.body);
+  
+//         const today = new Date();
+//         const birthDate = new Date(dateOfBirth);
+//         let age = today.getFullYear() - birthDate.getFullYear();
+//         const month = today.getMonth() - birthDate.getMonth();
+//         if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+//           age--;
+//         }
+  
+        
+//         const bmi = weight / (height / 100 * height / 100);
+  
+//         req.body.age = age;
+//         req.body.Bmi = bmi;
+  
+//         createPatientDb(decodedToken.data.ID, req.body, async function (result) {
+//           if (result) {
+//             res.status(200).json({
+//               status: 200,
+//               message: "Data is successfully added to Personal Form of the Patient",
+//               data: result,
+//             });
+//           }
+//         });
+//       });
+//     } catch (err) {
+//       res.status(500).json({
+//         status: 500,
+//         error: "Server error",
+//         message: err.message,
+//       });
+//     }
+//   };
+  
 export const CreatePatient = (req, res) => {
     console.log("hello");
     try {
-        const authHeader = req.headers["authorization"];
-        let decodedToken = verifyToken(authHeader);
-        const Id = decodedToken.data.ID;
-        listSpecificPatientData(Id,async function (result){
-            if(result.length>0){
-                res.status(409).json({
-                    status:409,
-                    error:"Patient already exists",
-                    message:"Patient with this Id already present"
-                });
-            }else{
-                createPatientDb(decodedToken.data.ID,req.body, async function(result){
-                    if(result){
-                        res.status(200).json({
-                            status:200,
-                            message:"Data is successfully added to Personal Form of the Patient",
-                            data:result,
-
-                        });
-                    }
-                });
-            }
+      const authHeader = req.headers["authorization"];
+      let decodedToken = verifyToken(authHeader);
+      const Id = decodedToken.data.ID;
+  
+      // Check for existing patient (unchanged)
+      listSpecificPatientData(Id, async function (result) {
+        if (result.length > 0) {
+          res.status(409).json({
+            status: 409,
+            error: "Patient already exists",
+            message: "Patient with this Id already present",
+          });
+          return; // Exit the function if user already exists
+        }
+  
+        const { height, weight, dateOfBirth } = req.body;
+  
+   
+        const heightParts = height.split("-");
+        const feet = parseInt(heightParts[0], 10);
+        const inches = parseInt(heightParts[1], 10);
+  
+        
+        const heightInCm = (feet * 12 + inches) * 2.54;
+  
+        const weightAsNumber = parseFloat(weight);
+  
+       
+        const bmi = weightAsNumber / (heightInCm / 100 * heightInCm / 100);
+  
+       
+        const today = new Date();
+        const birthDate = new Date(dateOfBirth);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const month = today.getMonth() - birthDate.getMonth();
+        if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+  
+        req.body.age = age;
+        req.body.Bmi = bmi;
+  
+        createPatientDb(decodedToken.data.ID, req.body, async function (result) {
+          if (result) {
+            res.status(200).json({
+              status: 200,
+              message: "Data is successfully added to Personal Form of the Patient",
+              data: result,
+            });
+          }
         });
-    } catch(e){
-        res.status(500).json({
-            status: 500,
-            error: "Server error",
-            message: err.message,
-        })
+      });
+    } catch (err) {
+      res.status(500).json({
+        status: 500,
+        error: "Server error",
+        message: err.message,
+      });
     }
-              
-};
-
+  };
 
 export const UpdatePatientPersonalData = (req, res) => {
     try {

@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "5d41d365-9c7f-4959-b698-abad5a5148d1",
+		"name": "UploadDocuments",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34014049"
+	},
+	"item": [
+		{
+			"name": "Upload Documents",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTEsImVtYWlsIjoiS2VzaGF2QGdtYWlsLmNvbSIsInBhc3N3b3JkcyI6IiQyYSQxMCRZVTFDVkx1UFUuS2JFQ3hyNEk5RU91L05vYjNGOHBXYlg4QzBuMjdqVXdRN3JoUkMxQnZBaSIsImlhdCI6MTcxMjUxOTIwOSwiZXhwIjoxNzEyNTI2NDA5fQ.QUFkl7I9OkX4zt4ZhvWx63tGYFk93PPn8cxnCrZ7G98",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "File",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MTIsImVtYWlsIjoiWWFzaEBnbWFpbC5jb20iLCJwYXNzd29yZHMiOiIkMmEkMTAkM0pxUGJCYUVQb2ljOGZkMVVTbW1QdTdKdkREOHVmcm9iYUQvbnJUSzBvQVJSYTBvS29IcC4iLCJpYXQiOjE3MTI1NTAxMzcsImV4cCI6MTcxMjU1NzMzN30.71bO4FpiQOLQsenVSoNcPL3IvmEUVPCGntCTcwbeveg",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "aadharCardFront",
+							"type": "file",
+							"src": "/C:/Users/Keshav_Oza/Pictures/Screenshots/Screenshot (1).png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/upload/aadhar-card/front",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"upload",
+						"aadhar-card",
+						"front"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Documents",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJwYXNzd29yZHMiOiIkMmEkMTAkVTBIMWVMcjZXVUNzaWxPZmxaQXBDZThzd0FYTDdqSzd2RmJBLjgvNE5mYkVLU2cxWlRwcG0iLCJyb2xlcyI6ImFkbWluIiwiaWF0IjoxNzEyODQwNzcyLCJleHAiOjE3MTI4NDQzNzJ9.E50Zqh6B8Ql7XUTSAFawan_xfA2vOXQIbWBponutyvs",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/uploads/updateDocuments/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"uploads",
+						"updateDocuments",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
