@@ -1,6 +1,5 @@
 
 
-
 import express from 'express';
 import multer from 'multer';
 // import {uploadDocuments,updateDocuments} from "../Controller/documentControllers.js"
@@ -15,7 +14,8 @@ import  { uploadDocuments, updateDocuments } from "../Controller/documentControl
 import {authenticateToken} from "../Middleware/authMiddleware.js";
 
 router.post('/uploadDocuments',authenticateToken, uploadDocuments);
-router.put('/updateDocuments', authenticateToken, updateDocuments);
+// router.put('/updateDocuments/:userId', authenticateToken, updateDocuments);
+router.put('/updateDocuments/:userId',authenticateToken, updateDocuments);
 
 
 // module.exports = router;
