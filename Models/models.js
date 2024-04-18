@@ -231,16 +231,16 @@ export const listSpecificPatientData = (Id, callback) => {
   );
 };
 
-export const createPatientDb = (ID, body, callback) => {
+export const createPatientDb = (ID, body,age,bmi, callback) => {
   const {
       firstName,
       lastName,
       mobileNumber,
       dateOfBirth,
-      age,
+
       weight,
       height,
-      Bmi,
+
       countryOfOrigin,
       isDiabetic,
       hasCardiacIssues,
@@ -248,6 +248,8 @@ export const createPatientDb = (ID, body, callback) => {
       diseaseType,
       diseaseDescription
   } = body;
+  const Patientage=age;
+  const Patientbmi=bmi;
 
   db.query(
       "INSERT INTO personalInfo (Id, firstName, lastName, mobileNumber, dateOfBirth, age, weight, height, Bmi, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -257,10 +259,10 @@ export const createPatientDb = (ID, body, callback) => {
           lastName,
           mobileNumber,
           dateOfBirth,
-          age,
+          Patientage,
           weight,
           height,
-          Bmi,
+          Patientbmi,
           countryOfOrigin,
           isDiabetic,
           hasCardiacIssues,
