@@ -231,16 +231,18 @@ export const listSpecificPatientData = (Id, callback) => {
   );
 };
 
+listSpecificPatientData(99,function(result){
+  console.log(result);
+})
+
 export const createPatientDb = (ID, body,age,bmi, callback) => {
   const {
       firstName,
       lastName,
       mobileNumber,
       dateOfBirth,
-
       weight,
       height,
-
       countryOfOrigin,
       isDiabetic,
       hasCardiacIssues,
@@ -252,9 +254,10 @@ export const createPatientDb = (ID, body,age,bmi, callback) => {
   const Patientbmi=bmi;
 
   db.query(
-      "INSERT INTO personalInfo (Id, firstName, lastName, mobileNumber, dateOfBirth, age, weight, height, Bmi, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO personalInfo (Id,flag, firstName, lastName, mobileNumber, dateOfBirth, age, weight, height, Bmi, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
       [
           ID,
+          true,
           firstName,
           lastName,
           mobileNumber,
@@ -272,6 +275,7 @@ export const createPatientDb = (ID, body,age,bmi, callback) => {
       ],
       async (err, result) => {
           if (err) {
+            console.log(err);
               callback({ error: "Database error" });
           } else {
               return callback(result);
@@ -364,20 +368,54 @@ export const uploadDocument = (
 
 
 
-export const updateDocumentsModel = (
-  updateKey,
-  updateValues,
-  callback
-) => {
-  db.query(`update UploadedDocuments set ${updateKey.join(", ")} where Id=?`, updateValues,
-  (err, result) => {
+// export const updateDocumentsModel = (
+//   updateKey,
+//   updateValues,
+//   callback
+// ) => {
+//   db.query(`update UploadedDocuments set ${updateKey.join(", ")} where Id=?`, updateValues,
+//   (err, result) => {
+//     if (err) {
+//       callback({ error: "Database error: " + err.message });
+//     } else {
+//       return callback(result);
+//     }
+//   }
+//   );
+// };
+export const updateDocumentPaths = async (userId, filePaths, callback) => {
+   const { aadharCardFront, aadharCardBack, medicalInsuranceCardFront, medicalInsuranceCardBack } = await filePaths;
+  // const query = ;
+  // const values = [];
+  // console.log(aadharCardFront,aadharCardBack,medicalInsuranceCardFront,medicalInsuranceCardBack,userId);
+
+  db.query(`
+  update UploadedDocuments set aadharCardFront = ?,aadharCardBack = ?,medicalInsuranceCardFront=?,medicalInsuranceCardBack=? where Id = ?;
+  `, [aadharCardFront, aadharCardBack, medicalInsuranceCardFront, medicalInsuranceCardBack, userId], (err, result) => {
     if (err) {
-      callback({ error: "Database error: " + err.message });
+      console.log(err);
+      callback({ error: "Database error" });
     } else {
-      return callback(result);
+      console.log(result);
+      callback({error:null,result:result});
+      
     }
-  }
-  );
+  });
+};
+
+
+export const checkDocAlreadyPresent = (userId, callback) => {
+  // const { aadharCardFront, aadharCardBack, medicalInsuranceCardFront, medicalInsuranceCardBack } = filePaths;
+  const query = "SELECT * FROM UploadedDocuments WHERE Id=?";
+  const values = [userId];
+
+  db.query(query, values, async (err, result) => {
+      if (err) {
+          callback({ error: "Database error" });
+      } else {
+          callback(result);
+      }
+  });
 };
 
 

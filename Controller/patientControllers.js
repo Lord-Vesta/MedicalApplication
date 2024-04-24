@@ -1,7 +1,8 @@
 
-import { getPatientPersonalData, listSpecificPatientData, createPatientDb, updatePatientPersonalDataDb } from "../Models/models.js"
+ 
+import { createPatientDb, getPatientPersonalData, listSpecificPatientData, updatePatientPersonalDataDb } from "../Models/models.js";
 import { verifyToken } from "../Utils/jwtutils.js";
-
+ 
 export const getPatientData = (req, res) => {
     try {
         const authHeader = req.headers["authorization"];
@@ -43,135 +44,39 @@ export const getPatientData = (req, res) => {
         res.status(500).json({ status: 500, error: "Server error", message: error.message });
     }
 };
-
-
-
-// export const CreatePatient = (req, res) => {
-//     console.log("hello");
-//     try {
-//         const authHeader = req.headers["authorization"];
-//         let decodedToken = verifyToken(authHeader);
-//         const Id = decodedToken.data.ID;
-//         listSpecificPatientData(Id,async function (result){
-//             if(result.length>0){
-//                 res.status(409).json({
-//                     status:409,
-//                     error:"Patient already exists",
-//                     message:"Patient with this Id already present"
-//                 });
-//             }else{
-//                 createPatientDb(decodedToken.data.ID,req.body, async function(result){
-//                     if(result){
-//                         res.status(200).json({
-//                             status:200,
-//                             message:"Data is successfully added to Personal Form of the Patient",
-//                             data:result,
-
-//                         });
-//                     }
-//                 });
-//             }
-//         });
-//     } catch(e){
-//         res.status(500).json({
-//             status: 500,
-//             error: "Server error",
-//             message: err.message,
-//         })
-//     }
-
-// };
-// export const CreatePatient = (req, res) => {
-//     console.log("hello");
-//     try {
-//       const authHeader = req.headers["authorization"];
-//       let decodedToken = verifyToken(authHeader);
-//       const Id = decodedToken.data.ID;
-
-
-//       listSpecificPatientData(Id, async function (result) {
-//         if (result.length > 0) {
-//           res.status(409).json({
-//             status: 409,
-//             error: "Patient already exists",
-//             message: "Patient with this Id already present",
-//           });
-//           return; 
-//         }
-
-//         const { height, weight, dateOfBirth } = req.body;
-//         console.log(req.body);
-
-//         const today = new Date();
-//         const birthDate = new Date(dateOfBirth);
-//         let age = today.getFullYear() - birthDate.getFullYear();
-//         const month = today.getMonth() - birthDate.getMonth();
-//         if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
-//           age--;
-//         }
-
-
-//         const bmi = weight / (height / 100 * height / 100);
-
-//         req.body.age = age;
-//         req.body.Bmi = bmi;
-
-//         createPatientDb(decodedToken.data.ID, req.body, async function (result) {
-//           if (result) {
-//             res.status(200).json({
-//               status: 200,
-//               message: "Data is successfully added to Personal Form of the Patient",
-//               data: result,
-//             });
-//           }
-//         });
-//       });
-//     } catch (err) {
-//       res.status(500).json({
-//         status: 500,
-//         error: "Server error",
-//         message: err.message,
-//       });
-//     }
-//   };
-
+ 
 export const CreatePatient = (req, res) => {
     console.log("hello");
     try {
         const authHeader = req.headers["authorization"];
         let decodedToken = verifyToken(authHeader);
         const Id = decodedToken.data.ID;
-
-       
         listSpecificPatientData(Id, async function (result) {
+            console.log("inside listspecificData");
             if (result.length > 0) {
                 res.status(409).json({
                     status: 409,
                     error: "Patient already exists",
                     message: "Patient with this Id already present",
                 });
-
+ 
             }
             else {
-
-
-
-                const { height, weight, dateOfBirth } = req.body;
-
-
-                const heightParts = height.split("-");
+                const { height, weight, dateOfBirth } = await req.body;
+                console.log(height);
+                const heightParts = await height.split("-");
                 const feet = parseInt(heightParts[0], 10);
                 const inches = parseInt(heightParts[1], 10);
-
-
+ 
+ 
                 const heightInCm = (feet * 12 + inches) * 2.54;
-
+ 
                 const weightAsNumber = parseFloat(weight);
-
-
+ 
+ 
                 const bmi = weightAsNumber / (heightInCm / 100 * heightInCm / 100);
-
-
+ 
+ 
                 const today = new Date();
                 const birthDate = new Date(dateOfBirth);
                 let age = today.getFullYear() - birthDate.getFullYear();
@@ -179,10 +84,10 @@ export const CreatePatient = (req, res) => {
                 if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
                     age--;
                 }
-
+ 
                 req.body.age = age;
                 req.body.Bmi = bmi;
-
+ 
                 createPatientDb(decodedToken.data.ID, req.body, age, bmi, async function (result) {
                     if (result) {
                         res.status(200).json({
@@ -202,113 +107,8 @@ export const CreatePatient = (req, res) => {
         });
     }
 };
-
-// export const UpdatePatientPersonalData = (req, res) => {
-//     try {
-//         const Id = parseInt(req.params.id);
-//         const allowedColumns = [
-//             "firstName",
-//             "lastName",
-//             "mobileNumber",
-//             "weight",
-//             "height",
-//             "countryOfOrigin",
-//             "isDiabetic",
-//             "hasCardiacIssues",
-//             "hasBloodPressureConcerns",
-//             "diseaseType",
-//             "diseaseDescription",
-//             "dateOfBirth" 
-//         ];
-//         let updateKey = [];
-//         let updateValues = [];
-//         const authHeader = req.headers["authorization"];
-//         let decodedToken = verifyToken(authHeader); 
-
-  
-//         if (decodedToken.data.roles === "admin") {
-//             console.log(req.body); 
-
-            
-//             for (let column of allowedColumns) {
-//                 if (column in req.body) {
-//                     updateKey.push(`${column}=?`);
-//                     updateValues.push(req.body[column]);
-
-                   
-//                     if (column === "weight" || column === "height" || column === "dateOfBirth") {
-//                         const height = req.body.height;
-//                         const weight = req.body.weight;
-//                         const dob = req.body.dateOfBirth;
-
-//                         if (height) {
-//                             const heightParts = height.split("-");
-//                             const feet = parseInt(heightParts[0], 10);
-//                             const inches = parseInt(heightParts[1], 10);
-//                             const heightInCm = (feet * 12 + inches) * 2.54;
-//                             updateValues.push((weight / (heightInCm / 100 * heightInCm / 100)));
-//                         }
-
-//                         if (weight || dob) {
-//                             updateValues.push(calculateAge(dob));
-//                         }
-//                     }
-//                 }
-//             }
-//         } else {
-            
-//             if (decodedToken.data.ID === Id) {
-//                 console.log(req.body); 
-
-//                 for (let column of allowedColumns) {
-//                     if (column in req.body) {
-//                         updateKey.push(`${column}=?`);
-//                         updateValues.push(req.body[column]);
-
-                        
-//                         if (column === "weight" || column === "height" || column === "dateOfBirth") {
-//                             const height = req.body.height;
-//                             const weight = req.body.weight;
-//                             const dob = req.body.dateOfBirth;
-
-//                             if (height) {
-//                                 const heightParts = height.split("-");
-//                                 const feet = parseInt(heightParts[0], 10);
-//                                 const inches = parseInt(heightParts[1], 10);
-//                                 const heightInCm = (feet * 12 + inches) * 2.54;
-//                                 updateValues.push((weight / (heightInCm / 100 * heightInCm / 100)));
-//                             }
-
-//                             if (weight || dob) {
-//                                 updateValues.push(calculateAge(dob));
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     } catch (error) {
-//         console.error("Error updating patient personal data:", error);
-//         res.status(500).json({ error: "Internal server error" });
-//     }
-
-//     // Function to calculate age based on dateOfBirth (replace with your logic)
-//     function calculateAge(dateOfBirth) {
-//         const today = new Date();
-//         const birthDate = new Date(dateOfBirth);
-//         let age = today.getFullYear() - birthDate.getFullYear();
-//         const month = today.getMonth() - birthDate.getMonth();
-//         if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
-//             age--;
-//         }
-//         return age;
-//     }
-
-    
-// };
-
-
-
+ 
+ 
 export const UpdatePatientPersonalData = (req, res) => {
     try {
         const Id = parseInt(req.params.id);
@@ -316,10 +116,10 @@ export const UpdatePatientPersonalData = (req, res) => {
             "firstName",
             "lastName",
             "mobileNumber",
-
+ 
             "weight",
             "height",
-
+ 
             "countryOfOrigin",
             "isDiabetic",
             "hasCardiacIssues",
@@ -331,9 +131,13 @@ export const UpdatePatientPersonalData = (req, res) => {
         let updateValues = [];
         const authHeader = req.headers["authorization"];
         let decodedToken = verifyToken(authHeader);
+        if(dateOfBirth in req.body){
+            
+        }
         if (decodedToken.data.roles = "admin") {
             for (let column of allColumns) {
                 if (column in req.body) {
+                    console.log(req.body);
                     updateKey.push(`${column}=?`),
                         updateValues.push(req.body[column]);
                 }
@@ -341,9 +145,12 @@ export const UpdatePatientPersonalData = (req, res) => {
             if (updateKey.length == 0) {
                 return res.sendStatus(204)
             }
-
+ 
             updateValues.push(Id);
+
+
             updatePatientPersonalDataDb(updateKey, updateValues, async function (result) {
+
                 if (result) {
                     res.status(200).json({
                         status: "Patient Data Successfully edited",
@@ -375,7 +182,7 @@ export const UpdatePatientPersonalData = (req, res) => {
                 });
             }
         }
-
+ 
     } catch (err) {
         res.status(500).json({
             status: 500, error: "Server error",
@@ -383,16 +190,16 @@ export const UpdatePatientPersonalData = (req, res) => {
         });
     }
 };
-
-// module.exports = { getPatientData, CreatePatient, UpdatePatientPersonalData }
-
-
-
-
-
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
