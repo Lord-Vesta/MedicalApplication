@@ -35,3 +35,8 @@ Ensure you have the following installed on your system:
 
     secretKey = "secretKey" //create a secret key and enter it
     ```
+
+6. run the file by using following command:
+   ```
+   npm run dev
+   ``` 
