@@ -13,7 +13,6 @@ Ensure you have the following installed on your system:
 
    ```
    git clone https://github.com/Lord-Vesta/MedicalApplication.git
-
    ```
 2. Navigate to the project directory:
 
