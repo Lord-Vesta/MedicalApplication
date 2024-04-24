@@ -18,7 +18,7 @@ Ensure you have the following installed on your system:
 2. Navigate to the project directory:
 
    ```
-   cd node-db-assignment
+   cd MedicalApplication
    ```
 3. Install dependencies
     ```
