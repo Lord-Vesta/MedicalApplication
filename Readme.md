@@ -13,6 +13,7 @@ Ensure you have the following installed on your system:
 
    ```
    git clone https://github.com/Lord-Vesta/MedicalApplication.git
+
    ```
 2. Navigate to the project directory:
 
@@ -33,6 +34,7 @@ Ensure you have the following installed on your system:
     DB_PASSWORD="PASSWORD" // give your password
 
     secretKey = "secretKey" //create a secret key and enter it
+
     ```
 
 6. run the file by using following command:

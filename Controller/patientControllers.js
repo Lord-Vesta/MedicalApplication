@@ -31,7 +31,7 @@ export const getPatientData = (req, res) => {
                         message: "Data displayed successfully",
                         data: result
                     });
-                } else if (result.length <= 0) {
+                } else if (!result.length) {
                     res.status(204).json({
                         status: 204,
                         message: "no content is available",
@@ -51,9 +51,10 @@ export const CreatePatient = (req, res) => {
         const authHeader = req.headers["authorization"];
         let decodedToken = verifyToken(authHeader);
         const Id = decodedToken.data.ID;
-        listSpecificPatientData(Id, async function (result) {
-            console.log("inside listspecificData");
-            if (result.length > 0) {
+
+        // console.log(Id);
+        listSpecificPatientData(Id,async function (result){
+            if(result.length>0){
                 res.status(409).json({
                     status: 409,
                     error: "Patient already exists",

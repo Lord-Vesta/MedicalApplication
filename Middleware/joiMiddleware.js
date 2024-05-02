@@ -80,7 +80,7 @@ export const editFamilyDataJoi = (req,res,next)=>{
 
   if(result.error){
     res.status(400).json({
-      status: 400,
+      status: 400, 
       error: "Bad Request",
       message: "The request contains invalid or malformed input data.",
     });

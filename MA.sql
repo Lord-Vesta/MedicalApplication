@@ -52,13 +52,14 @@ CREATE TABLE
 
 CREATE TABLE
     UploadedDocuments (
-        flag bool,
         Id INT PRIMARY KEY,
         aadharCardFront VARCHAR(255),
         aadharCardBack VARCHAR(255),
         medicalInsuranceCardFront VARCHAR(255),
         medicalInsuranceCardBack VARCHAR(255)
     );
+
+drop table UploadedDocuments;
 
 select
     *
@@ -79,3 +80,10 @@ select
     *
 from
     CredentialData;
+
+update FamilyData set flag = false where Id = 19;
+
+    
+select * from CredentialData where Id = 3 and flag = true	;
+
+select * from FamilyData where Id = 19 and flag = true
