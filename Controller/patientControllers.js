@@ -30,7 +30,7 @@ export const getPatientData = (req, res) => {
                         message: "Data displayed successfully",
                         data: result
                     });
-                } else if (result.length <= 0) {
+                } else if (!result.length) {
                     res.status(204).json({
                         status: 204,
                         message: "no content is available",
@@ -52,6 +52,7 @@ export const CreatePatient = (req, res) => {
         const authHeader = req.headers["authorization"];
         let decodedToken = verifyToken(authHeader);
         const Id = decodedToken.data.ID;
+        // console.log(Id);
         listSpecificPatientData(Id,async function (result){
             if(result.length>0){
                 res.status(409).json({

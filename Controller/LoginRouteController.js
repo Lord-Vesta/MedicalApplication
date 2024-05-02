@@ -23,6 +23,7 @@ export const loginUser = (req, res) => {
         let userPassword = result[0].Password;
         let correctPassword = await bcrypt.compare(Password, userPassword);
         if (correctPassword) {
+          
           const token = generateJwt(result[0]);
           res.status(200).json({
             status: 200,

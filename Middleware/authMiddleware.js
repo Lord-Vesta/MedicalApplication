@@ -22,8 +22,6 @@ export const authenticateToken = (req, res, next) => {
     });
   }
 
-  req.user = result.data;
-  console.log("authentication completed");
   next();
 }
 

@@ -29,20 +29,30 @@ export const insertIntoData = (Email, Password, roles, flag, callback) => {
   );
 };
 
-export const deleteData = asyncHandler(async(Id, callback) => {
-  db.query(
-    `update CredentialData set flag = false WHERE Id = ?;`,
-    [Id],
-    async (err, result) => {
-      if (err) {
-        callback({ error: "Database error" });
-      } else {
-        return callback(result);
-      }
-    }
-  );
+export const deleteData = async(Id, callback) => {
+  try{
+    const connection = await db.promise().getConnection();
 
-});
+  await connection.beginTransaction();
+
+  await connection.execute('UPDATE CredentialData SET flag = false WHERE Id = ?', [Id]);
+  await connection.execute('UPDATE personalInfo SET flag = false WHERE Id = ?', [Id]);
+  await connection.execute('UPDATE FamilyData SET flag = false WHERE Id = ?', [Id]);
+  await connection.execute('UPDATE UploadedDocuments SET flag = false WHERE Id = ?', [Id]);
+
+  await connection.commit();
+  console.log('All tables updated successfully.');
+
+  connection.release();
+  return callback(result);
+  }catch(error){
+    console.error('Error updating tables:', error);
+    callback(error);
+  }
+  
+  
+
+};
 
 
 export const login = (Email, callback) => {
@@ -208,7 +218,7 @@ export const editfamilydata = (
   );
 };
 export const getPatientPersonalData = (callback) => {
-  db.query("select * from personalInfo", async (err, result) => {
+  db.query("select * from personalInfo where flag = true", async (err, result) => {
     if (err) {
       callback({ error: "Database error" });
     } else {
@@ -219,7 +229,7 @@ export const getPatientPersonalData = (callback) => {
 
 export const listSpecificPatientData = (Id, callback) => {
   db.query(
-    `select * from personalInfo where Id = ?`,
+    `select * from personalInfo where Id = ? where flag = true`,
     [Id],
     async (err, result) => {
       if (err) {
@@ -250,9 +260,10 @@ export const createPatientDb = (ID, body, callback) => {
   } = body;
 
   db.query(
-      "INSERT INTO personalInfo (Id, firstName, lastName, mobileNumber, dateOfBirth, age, weight, height, Bmi, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO personalInfo (Id, flag,firstName, lastName, mobileNumber, dateOfBirth, age, weight, height, Bmi, countryOfOrigin, isDiabetic, hasCardiacIssues, hasBloodPressureConcerns, diseaseType, diseaseDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
       [
           ID,
+          true,
           firstName,
           lastName,
           mobileNumber,
@@ -337,10 +348,11 @@ export const uploadDocument = (
 ) => {
   db.query(
     `
-    INSERT INTO UploadedDocuments (Id, aadharCardFront, aadharCardBack, medicalInsuranceCardFront, medicalInsuranceCardBack)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO UploadedDocuments (flag,Id, aadharCardFront, aadharCardBack, medicalInsuranceCardFront, medicalInsuranceCardBack)
+    VALUES (?, ?, ?, ?, ?,?)
     `,
     [
+      false,
       Id,
       aadharCardFront,
       aadharCardBack,

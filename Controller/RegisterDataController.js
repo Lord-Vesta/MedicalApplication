@@ -12,8 +12,10 @@ import {checkAlreadyPresent,
   insertIntoData,
   deleteData,
   ListData,listSpecificRegistrationData} from "../Models/models.js";
-import {verifyToken} from "../Utils/jwtutils.js";
+import {generateJwt, verifyToken} from "../Utils/jwtutils.js";
 import bcrypt from "bcryptjs"; 
+
+
 
 
 
@@ -191,7 +193,7 @@ export const addAdminRegistration = (req, res) => {
             Email,
             myEncPassword,
             roles,
-            flag,
+            flag, 
             async function (resut) {
               if (resut) {
                 res.status(201).json({

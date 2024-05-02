@@ -138,6 +138,9 @@ export const AddFamilyData = (req, res) => {
               async function (result) {
                 if (result) {
                   res.status(200).json({
+                    status: 200,
+                      message: "data is successfully added to familyData",
+                      data: result,
                   });
                 }
               }
