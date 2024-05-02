@@ -1,0 +1,103 @@
+{
+	"info": {
+		"_postman_id": "a87098af-3a79-4f5e-80ce-03312790c64f",
+		"name": "Login",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34014049"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"Keshav@gmail.com\",\r\n    \"password\":\"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"Keshav@gmail.com\",\r\n    \"password\":\"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "308"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"134-0ucVeeMzo6rMLuMdZKqv7Uekyqk\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 05 Apr 2024 14:22:49 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"Status\": \"successfull\",\n    \"Token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MywiZW1haWwiOiJLZXNoYXZAZ21haWwuY29tIiwicGFzc3dvcmRzIjoiJDJhJDEwJFd0TzFxdXF3R2F6ZDFWUU9QQWxUbGVLRGRpLjBWVDVabGRWMDI4LmpGVVFtcUJUTjNwS1MuIiwiaWF0IjoxNzEyMzI2OTY5LCJleHAiOjE3MTIzMzQxNjl9.QoA0sawchmElNYhxTOKRZyBDgXzOmxEN3ok5o04C6gU\"\n}"
+				}
+			]
+		}
+	]
+}

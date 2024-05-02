@@ -18,7 +18,7 @@ Ensure you have the following installed on your system:
 2. Navigate to the project directory:
 
    ```
-   cd node-db-assignment
+   cd MedicalApplication
    ```
 3. Install dependencies
     ```
@@ -34,4 +34,10 @@ Ensure you have the following installed on your system:
     DB_PASSWORD="PASSWORD" // give your password
 
     secretKey = "secretKey" //create a secret key and enter it
+
     ```
+
+6. run the file by using following command:
+   ```
+   npm run dev
+   ``` 

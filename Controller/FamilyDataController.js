@@ -240,7 +240,7 @@ export const EditFamilyData = (req, res) => {
         });
       }
     }
-  } catch (err) {
+  }  catch (err) {
     res
       .status(500)
       .json({ status: 500, error: "Server error", message: err.message });
